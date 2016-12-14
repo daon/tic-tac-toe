@@ -1,0 +1,11 @@
+{
+  "name": "tic-tac-toe",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "url": "git@github.com:daon/tic-tac-toe.git",
+    "type": "git"
+  },
+  "author": "Dan Andersson <dan.andersson@chimpiq.com> (https://chimpiq.com/)",
+  "license": "MIT"
+}
