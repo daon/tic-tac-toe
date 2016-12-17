@@ -1,6 +1,6 @@
 html, body {
     height: 100%;
-    background: linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+    background: linear-gradient(90deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
     color: #fff;     
 }
 
@@ -9,6 +9,36 @@ body {
     margin: 0;
     padding: 0;
     text-align: center;
+}
+
+.screen-1 {
+    display: none;
+}
+
+.row {
+    display: flex;
+    border-bottom: 1px solid #fff;
+}
+
+.row:last-child {
+    border: none;
+}
+
+.cell {
+    height: 140px;
+    width: 100px;
+    flex: 1;
+    border-right: 1px solid #fff;  
+}
+
+.cell:last-child {
+    border: none;
+}
+
+.cell:hover {
+    cursor: pointer;
+    background: #ccc;   
+    content: 'X';
 }
 
 .container {
