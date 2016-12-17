@@ -11,13 +11,13 @@ body {
     text-align: center;
 }
 
-.screen-1 {
+.screen-1, .screen-3 {
     display: none;
 }
 
 .row {
     display: flex;
-    border-bottom: 1px solid #fff;
+    border-bottom: 5px solid #333;
 }
 
 .row:last-child {
@@ -25,10 +25,12 @@ body {
 }
 
 .cell {
-    height: 140px;
+    height: 100px;
     width: 100px;
     flex: 1;
-    border-right: 1px solid #fff;  
+    border-right: 5px solid #333;
+    font-size: 1.6rem;
+    line-height: 100px;
 }
 
 .cell:last-child {
@@ -64,8 +66,7 @@ h1 {
     margin-bottom: 2.5rem;
     text-transform: uppercase;
     color: #36ebff;
-    text-shadow: 1px 1px 0px #000;
-    text-decoration: underline;
+    text-shadow: 5px 4px 0px #000;
 }
 
 .screen {
@@ -85,7 +86,8 @@ h2 {
     cursor: pointer;
     padding: 10px;
     color: #fff;   
-    text-shadow: 1px 1px 0px #000;
+    text-shadow: 5px 2px 0px #000;
+    font-size: 1.6rem;
 }
 
 .btn:hover {
@@ -126,7 +128,7 @@ h2 {
 
 @media only screen and (min-width: 768px)  {
     h1 { font-size: 2rem; }
-    .col {
-        flex: 0.5;
-    }
+    .col { flex: 0.5; }
+    .cell { font-size: 2rem; }
+    .btn { font-size: 2rem; }
 }
