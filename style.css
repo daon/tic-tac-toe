@@ -11,7 +11,7 @@ body {
     text-align: center;
 }
 
-.screen-1, .screen-3 {
+.screen-1, .screen-2, .screen-3 {
     display: none;
 }
 
@@ -87,7 +87,7 @@ h2 {
     padding: 10px;
     color: #fff;   
     text-shadow: 5px 2px 0px #000;
-    font-size: 1.6rem;
+    font-size: 1rem;
 }
 
 .btn:hover {
@@ -130,5 +130,5 @@ h2 {
     h1 { font-size: 2rem; }
     .col { flex: 0.5; }
     .cell { font-size: 2rem; }
-    .btn { font-size: 2rem; }
+    .btn { font-size: 1.5rem; }
 }
