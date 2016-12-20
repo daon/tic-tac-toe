@@ -6,3 +6,8 @@
 3. I can choose whether I want to play as X or O.
 
 ## Tasks
+- [x] Configure webpack 2.0 for dev and prod 
+- [x] Configure deployment to GitHub Pages
+- [ ] Configure jest for testing
+- [ ] Implement first test
+- [ ] Replace SAM pattern with redux

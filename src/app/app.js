@@ -8,5 +8,3 @@ model.init(state);
 actions.init(model.present);
 
 view.display(view.init(model));
-
-window.actions = actions;

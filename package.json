@@ -7,8 +7,9 @@
     "type": "git"
   },
   "scripts": {
-    "start": "webpack-dev-server --progress --profile --watch --content-base build/ --inline --hot --open",
-    "build": "webpack --progress --profile",
+    "start": "webpack-dev-server --progress --profile --watch --open",
+    "build": "webpack --progress --profile --env=PROD",
+    "predeploy": "yarn build",
     "deploy": "gh-pages -d build"
   },
   "author": "Dan Andersson <dan.andersson@chimpiq.com> (https://chimpiq.com/)",
@@ -19,12 +20,12 @@
     "babel-preset-es2015": "^6.18.0",
     "clean-webpack-plugin": "^0.1.14",
     "css-loader": "^0.26.1",
-    "extract-text-webpack-plugin": "^1.0.1",
+    "extract-text-webpack-plugin": "2.0.0-beta.4",
     "gh-pages": "^0.12.0",
     "html-webpack-plugin": "^2.24.1",
     "raw-loader": "^0.5.1",
     "style-loader": "^0.13.1",
-    "webpack": "^1.14.0",
-    "webpack-dev-server": "^1.16.2"
+    "webpack": "2.2.0-rc.1",
+    "webpack-dev-server": "2.2.0-rc.0"
   }
 }

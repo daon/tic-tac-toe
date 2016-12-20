@@ -6,33 +6,45 @@ let HtmlPlugin = require('html-webpack-plugin');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
 let CleanPlugin = require('clean-webpack-plugin');
 
-module.exports = {
-    entry: {
+module.exports = (env) => {
+    env = env || 'DEV';
+    let config = {};
+        
+    config.entry = {
         'tic-tac-toe': path.resolve(__dirname, 'src/index.js')
-    },  
-    output: {
+    };  
+
+    config.output = {
         path: path.resolve(__dirname, 'build'),
-        filename: '[name].[hash].js',
-        // publicPath: '/tic-tac-toe/'
-    },
-    module: {
-        loaders: [
+        filename: '[name].[hash].js'
+    };
+
+    if (env === 'PROD') {
+        config.output.publicPath = '/tic-tac-toe';
+    }
+    
+    config.module = {
+        rules: [
             {
                 test: /\.css$/,
                 exclude: /node_modules/,
-                loader: ExtractTextPlugin.extract('style', 'css')
+                loader: ExtractTextPlugin.extract({
+                    fallbackLoader: 'style-loader',
+                    loader: 'css-loader'
+                })
             },
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loader: 'babel',
-                query: {
+                loader: 'babel-loader',
+                options: {
                     presets: ['es2015']
                 }
             }
         ]
-    },
-    plugins: [
+    };
+    
+    config.plugins = [
         new CleanPlugin([path.resolve(__dirname, 'build')]),
         new ExtractTextPlugin('[name].[hash].css'),
         new HtmlPlugin({
@@ -40,9 +52,14 @@ module.exports = {
             path: path.resolve(__dirname, 'build'),
             inject: false
         })
-    ],
-    devServer: {
+    ];
+        
+    config.devServer = {
         contentBase: path.resolve(__dirname, 'build'),
+        inline: false,
+        hot: true,
         port: 9000
-    }
+    };
+
+    return config;
 };
