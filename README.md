@@ -12,5 +12,5 @@
 - [x] Implement first test
 - [x] Look into Minimax algorithm
 - [ ] Understand Minimax 🤔
-- [ ] Break down implementing AI for Tic Tac Toe into smaller tasks
+- [ ] Break down implementation of AI into smaller tasks
 - [ ] Do TDD when implementing AI
