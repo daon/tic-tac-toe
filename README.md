@@ -8,6 +8,9 @@
 ## Tasks
 - [x] Configure webpack 2.0 for dev and prod 
 - [x] Configure deployment to GitHub Pages
-- [ ] Configure jest for testing
-- [ ] Implement first test
-- [ ] Replace SAM pattern with redux
+- [x] Configure mocha for testing
+- [x] Implement first test
+- [x] Look into Minimax algorithm
+- [ ] Understand Minimax 🤔
+- [ ] Break down implementing AI for Tic Tac Toe into smaller tasks
+- [ ] Do TDD when implementing AI
