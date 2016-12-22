@@ -11,6 +11,7 @@
 - [x] Configure mocha for testing
 - [x] Implement first test
 - [x] Look into Minimax algorithm
+- [ ] Do TDD when implementing two player game
 - [ ] Understand Minimax 🤔
 - [ ] Break down implementing AI for Tic Tac Toe into smaller tasks
 - [ ] Do TDD when implementing AI
