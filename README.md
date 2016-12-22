@@ -13,5 +13,5 @@
 - [x] Look into Minimax algorithm
 - [ ] Do TDD when implementing two player game
 - [ ] Understand Minimax 🤔
-- [ ] Break down implementing AI for Tic Tac Toe into smaller tasks
+- [ ] Break down implementation of AI into smaller tasks
 - [ ] Do TDD when implementing AI
