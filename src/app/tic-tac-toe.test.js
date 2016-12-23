@@ -54,8 +54,29 @@ describe('Tic Tac Toe', () => {
             expect(game.placeChecker(0, 0)).to.equal(false);
         });
 
-        it('player one place X on board', () => {
-            
+        it('player one place X:es on the board', () => {
+            game.placeChecker(0, 0);
+            expect(game.getBoard()[0]).to.equal('X');
+        });
+
+        it('player two place O:s on the board', () => {
+            game.placeChecker(0, 0);
+            game.placeChecker(0, 1);
+            expect(game.getBoard()[1]).to.equal('O');
+        });
+
+        it("given no winner getWinner() should return null", () => {
+            expect(game.getWinner()).to.equal(null);
+        });
+
+        it('given player one has three checkers in a row getWinner() should return 1', () => {
+            game.placeChecker(0, 0); // player 1
+            game.placeChecker(1, 0); // player 2
+            game.placeChecker(0, 1); // player 1
+            game.placeChecker(1, 1); // player 2
+            game.placeChecker(0, 2); // player 1
+
+            expect(game.getWinner()).to.equal(1);
         });
     });
 
