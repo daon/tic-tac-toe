@@ -24,7 +24,6 @@ describe('Tic Tac Toe', () => {
             [-234, 0], [2342, 1], [42, 2]   
         ];
 
-
         beforeEach(() => {
             game = createGame();
         })
@@ -38,13 +37,13 @@ describe('Tic Tac Toe', () => {
         });
 
         validCells.forEach(([row, col]) => {
-            it(`given row: ${row} and col: ${col} placeChecker(row, col) should return true`, () => {
+            it(`given row: ${row} and col: ${col} then placeChecker(row, col) should return true`, () => {
                 expect(game.placeChecker(0, 0)).to.equal(true); 
             });
         });
 
         someInvalidCells.forEach(([row, col]) => {
-            it(`given row: ${row} and col: ${col} placeChecker(row, col) should return false`, () => {
+            it(`given row: ${row} and col: ${col} then placeChecker(row, col) should return false`, () => {
                 expect(game.placeChecker(-1, 2)).to.equal(false);
             });
         });
@@ -69,7 +68,7 @@ describe('Tic Tac Toe', () => {
             expect(game.getWinner()).to.equal(null);
         });
 
-        it('given player one has three checkers in a row getWinner() should return 1', () => {
+        it('given player one has three checkers in a row then getWinner() should return 1', () => {
             game.placeChecker(0, 0); // player 1
             game.placeChecker(1, 0); // player 2
             game.placeChecker(0, 1); // player 1
@@ -77,6 +76,27 @@ describe('Tic Tac Toe', () => {
             game.placeChecker(0, 2); // player 1
 
             expect(game.getWinner()).to.equal(1);
+        });
+
+        it('given player one has three checkers in a column then getWinner() should return 1', () => {
+            game.placeChecker(0, 0); // player 1
+            game.placeChecker(0, 1); // player 2
+            game.placeChecker(1, 0); // player 1
+            game.placeChecker(1, 1); // player 2
+            game.placeChecker(2, 0); // player 1
+
+            expect(game.getWinner()).to.equal(1);
+        });
+
+        it('given player one hase three checkers in a diagonal then getWinner() should return 1', () => {
+            game.placeChecker(0, 0); // player 1
+            game.placeChecker(0, 1); // player 2
+            game.placeChecker(1, 1); // player 1
+            game.placeChecker(1, 2); // player 2
+            game.placeChecker(2, 2); // player 1
+
+            expect(game.getWinner()).to.equal(1);
+
         });
     });
 
