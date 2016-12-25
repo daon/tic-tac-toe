@@ -1,8 +1,11 @@
 'use strict';
 
-const EMPTY_CELL = '';
-const PLAYER_ONE = 0;
-const PLAYER_TWO = 1;
+export const BOARD_SIZE = 9;
+export const EMPTY_CELL = '';
+export const PLAYER_ONE = 0;
+export const PLAYER_TWO = 1;
+export const CHECKER_ONE = 'X';
+export const CHECKER_TWO = 'O';
 
 function getPosition(row, column) {
     return (row * 3) + column;
@@ -14,10 +17,6 @@ function isOnBoard(board, position) {
 
 function isEmptyCell(board, position) {
     return board[position] === EMPTY_CELL;
-};
-
-function getPlayerName(player) {
-    return player + 1;
 }
 
 function nextPlayer(currentPlayer) {
@@ -50,30 +49,37 @@ function threeInAColumn(board, checker) {
 }
 
 function threeInADiagnoal(board, checker) {
-
     return (board[getPosition(0, 0)] === checker &&
-            board[getPosition(1, 4)] === checker &&
-            board[getPosition(2, 8)] === checker) ||
+            board[getPosition(1, 1)] === checker &&
+            board[getPosition(2, 2)] === checker) ||
             (board[getPosition(0, 2)] === checker &&
-            board[getPosition(1, 4)] === checker &&
-            board[getPosition(2, 6)] === checker); 
+            board[getPosition(1, 1)] === checker &&
+            board[getPosition(2, 0)] === checker); 
+}
+
+function isWinner(board, checker) {
+    return threeInARow(board, checker) || 
+    threeInAColumn(board, checker) || 
+    threeInADiagnoal(board, checker);
 }
 
 export function createGame() {
-    const CHECKER_ONE = 'X';
-    const CHECKER_TWO = 'O'
-    const BOARD_SIZE = 9;
-
     let board = Array(BOARD_SIZE).fill(EMPTY_CELL);
     let currentPlayer = PLAYER_ONE;
     let playerCheckers = [CHECKER_ONE, CHECKER_TWO];
 
     return {
         getBoard: () => board,
-        getCurrentPlayer: () => getPlayerName(currentPlayer),
+        getCurrentPlayer: () => currentPlayer,
         placeChecker: (row, column) => {
-            const position = getPosition(row, column);
+            const previousPlayer = nextPlayer(currentPlayer);
 
+            if (isWinner(board, playerCheckers[previousPlayer])) {
+                return false;
+            }
+
+            const position = getPosition(row, column);
+            
             if (!isOnBoard(board, position) || !isEmptyCell(board, position)) {
                 return false;
             }
@@ -83,19 +89,15 @@ export function createGame() {
             return true;
         },
         getWinner: () => {
-            if (threeInARow(board, playerCheckers[PLAYER_ONE])) {
-                return getPlayerName(PLAYER_ONE);
+            if (isWinner(board, playerCheckers[PLAYER_ONE])) {
+                return PLAYER_ONE;
             }
 
-            if (threeInAColumn(board, playerCheckers[PLAYER_ONE])) {
-                return getPlayerName(PLAYER_ONE);
-            }
-
-            if (threeInADiagnoal(board, playerCheckers[PLAYER_ONE])) {
-                return getPlayerName(PLAYER_ONE);
+            if (isWinner(board, playerCheckers[PLAYER_TWO])) {
+                return PLAYER_TWO;
             }
 
             return null;
         }
     };
-};
+}

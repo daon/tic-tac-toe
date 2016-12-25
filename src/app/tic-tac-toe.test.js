@@ -1,7 +1,8 @@
 'use strict';
 import { describe, it, beforeEach } from 'mocha';
 import { expect } from 'chai';
-import { createGame } from './tic-tac-toe';
+import { createGame, PLAYER_ONE, EMPTY_CELL, CHECKER_ONE, CHECKER_TWO } from './tic-tac-toe';
+import { VALID_CELLS, SOME_INVALID_CELLS, SOME_GAMES } from './testdata';
 
 describe('Canary', () => {
     it('works', () => {
@@ -13,38 +14,28 @@ describe('Tic Tac Toe', () => {
 
     describe('Two Player Game', () => {
         let game;
-        const validCells = [
-            [0, 0], [0, 1], [0, 2],
-            [1, 0], [1, 1], [1, 2],
-            [2, 0], [2, 1], [2, 2]
-        ];
-        const someInvalidCells = [
-            [-1, 0], [-1, 1], [-1, 2],
-            [0, -1], [3, -11], [234, 23423],
-            [-234, 0], [2342, 1], [42, 2]   
-        ];
 
         beforeEach(() => {
             game = createGame();
         })
 
         it("board is empty at the start", () => {
-            expect(game.getBoard().join('')).to.equal('');
+            expect(game.getBoard().join(EMPTY_CELL)).to.equal(EMPTY_CELL);
         });
 
         it('player one begins', () => {
-            expect(game.getCurrentPlayer()).to.equal(1);
+            expect(game.getCurrentPlayer()).to.equal(PLAYER_ONE);
         });
 
-        validCells.forEach(([row, col]) => {
-            it(`given row: ${row} and col: ${col} then placeChecker(row, col) should return true`, () => {
-                expect(game.placeChecker(0, 0)).to.equal(true); 
+        VALID_CELLS.forEach(([row, column]) => {
+            it(`given row: ${row} and column: ${column} then placeChecker(row, column) should return true`, () => {
+                expect(game.placeChecker(row, column)).to.equal(true); 
             });
         });
 
-        someInvalidCells.forEach(([row, col]) => {
-            it(`given row: ${row} and col: ${col} then placeChecker(row, col) should return false`, () => {
-                expect(game.placeChecker(-1, 2)).to.equal(false);
+        SOME_INVALID_CELLS.forEach(([row, column]) => {
+            it(`given row: ${row} and column: ${column} then placeChecker(row, column) should return false`, () => {
+                expect(game.placeChecker(row, column)).to.equal(false);
             });
         });
 
@@ -53,51 +44,41 @@ describe('Tic Tac Toe', () => {
             expect(game.placeChecker(0, 0)).to.equal(false);
         });
 
-        it('player one place X:es on the board', () => {
+        it(`player one place ${CHECKER_ONE}:es on the board`, () => {
             game.placeChecker(0, 0);
-            expect(game.getBoard()[0]).to.equal('X');
+            expect(game.getBoard()[0]).to.equal(CHECKER_ONE);
         });
 
-        it('player two place O:s on the board', () => {
+        it(`player two place ${CHECKER_TWO}:s on the board`, () => {
             game.placeChecker(0, 0);
             game.placeChecker(0, 1);
-            expect(game.getBoard()[1]).to.equal('O');
+            expect(game.getBoard()[1]).to.equal(CHECKER_TWO);
         });
 
         it("given no winner getWinner() should return null", () => {
             expect(game.getWinner()).to.equal(null);
         });
 
-        it('given player one has three checkers in a row then getWinner() should return 1', () => {
-            game.placeChecker(0, 0); // player 1
-            game.placeChecker(1, 0); // player 2
-            game.placeChecker(0, 1); // player 1
-            game.placeChecker(1, 1); // player 2
-            game.placeChecker(0, 2); // player 1
+        SOME_GAMES.forEach(({ winner, winningMove, result, moves }) => {
+            it(`given ${winner} has ${winningMove} then getWinner() should return ${result}`, () => {
+                moves.forEach(([row, column]) => {
+                    game.placeChecker(row, column);
+                });
 
-            expect(game.getWinner()).to.equal(1);
+                expect(game.getWinner()).to.equal(result);
+            })
         });
 
-        it('given player one has three checkers in a column then getWinner() should return 1', () => {
-            game.placeChecker(0, 0); // player 1
-            game.placeChecker(0, 1); // player 2
-            game.placeChecker(1, 0); // player 1
-            game.placeChecker(1, 1); // player 2
-            game.placeChecker(2, 0); // player 1
-
-            expect(game.getWinner()).to.equal(1);
+        it('given a player has won then placeChecker(row, column) should return false', () => {
+            game.placeChecker(0, 0);
+            game.placeChecker(1, 0);
+            game.placeChecker(0, 1);
+            game.placeChecker(1, 1);
+            game.placeChecker(0, 2);
+            
+            expect(game.placeChecker(1, 2)).to.equal(false);
         });
 
-        it('given player one hase three checkers in a diagonal then getWinner() should return 1', () => {
-            game.placeChecker(0, 0); // player 1
-            game.placeChecker(0, 1); // player 2
-            game.placeChecker(1, 1); // player 1
-            game.placeChecker(1, 2); // player 2
-            game.placeChecker(2, 2); // player 1
-
-            expect(game.getWinner()).to.equal(1);
-
-        });
     });
 
 });
