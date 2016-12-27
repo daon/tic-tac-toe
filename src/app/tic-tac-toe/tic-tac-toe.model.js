@@ -6,22 +6,30 @@ export const CHECKER_ONE = 'X';
 export const CHECKER_TWO = 'O';
 export const PLAYER_ONE = 0;
 export const PLAYER_TWO = 1;
+export const DEFAULT_CELLS = Array(BOARD_SIZE*BOARD_SIZE).fill(EMPTY_CELL);
+
 
 export let model = {
-    cells: Array(BOARD_SIZE*BOARD_SIZE).fill(EMPTY_CELL),
+    cells: DEFAULT_CELLS.slice(),
     currentPlayer: PLAYER_ONE,
     playerCheckers: [CHECKER_ONE, CHECKER_TWO],
     gameOver: false
 };
 
-model.init = (state) => model.state = state;
+model.init = (state) => {
+    model.state = state;
+    model.cells = DEFAULT_CELLS.slice();
+    model.currentPlayer = PLAYER_ONE;
+    model.playerCheckers = [CHECKER_ONE, CHECKER_TWO];
+    model.gameOver = false;
+} 
 
-model.isCell = (cell) => {
-    return cell >= 0 && cell < model.cells.length;
+model.isCell = (position) => {
+    return position >= 0 && position < model.cells.length;
 };
 
-model.isEmptyCell = (cell) => {
-    return model.cells[cell] === EMPTY_CELL;
+model.isEmptyCell = (position) => {
+    return model.cells[position] === EMPTY_CELL;
 };
 
 model.nextPlayer = () => {
@@ -30,8 +38,8 @@ model.nextPlayer = () => {
 
 model.present = (data) => {
     if (model.state.game(model)) {
-        if (model.isCell(data.cell) && model.isEmptyCell(data.cell)) {
-            model.cells[data.cell] = model.playerCheckers[model.currentPlayer];
+        if (model.isCell(data.position) && model.isEmptyCell(data.position)) {
+            model.cells[data.position] = model.playerCheckers[model.currentPlayer];
             model.currentPlayer = model.nextPlayer();
         }
     }

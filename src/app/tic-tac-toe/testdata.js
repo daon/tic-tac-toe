@@ -1,13 +1,6 @@
-export const VALID_CELLS = [
-    [0, 0], [0, 1], [0, 2],
-    [1, 0], [1, 1], [1, 2],
-    [2, 0], [2, 1], [2, 2]
-];
-export const SOME_INVALID_CELLS = [
-    [-1, 0], [-1, 1], [-1, 2],
-    [0, -1], [3, -11], [234, 23423],
-    [-234, 0], [2342, 1], [42, 2]   
-];
+export const VALID_CELLS = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+
+export const SOME_INVALID_CELLS = [-1, -200, 9, 123, 12312, 31231];
 
 export const SOME_GAMES = [
     {

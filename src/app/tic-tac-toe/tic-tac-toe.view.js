@@ -17,7 +17,7 @@ view.game = (model) => {
         if (i % BOARD_SIZE === 0) {
             representation += '<div class="row">';
         }
-        representation += `<div class="cell" onclick="actions.placeChecker({ cell: ${i} })">${model.cells[i]}</div>`;
+        representation += `<div class="cell" onclick="actions.placeChecker({ position: ${i} })">${model.cells[i]}</div>`;
         
         if (i % BOARD_SIZE === (BOARD_SIZE - 1)) {
             representation += '</div>';

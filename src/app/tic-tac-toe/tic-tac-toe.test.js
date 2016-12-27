@@ -1,8 +1,11 @@
 'use strict';
 import { describe, it, beforeEach } from 'mocha';
 import { expect } from 'chai';
-import { createGame, PLAYER_ONE, EMPTY_CELL, CHECKER_ONE, CHECKER_TWO } from './tic-tac-toe';
+import { state } from './tic-tac-toe.state';
+import { model, EMPTY_CELL, PLAYER_ONE, PLAYER_TWO, CHECKER_ONE, CHECKER_TWO } from './tic-tac-toe.model';
+import { actions } from './tic-tac-toe.actions';
 import { VALID_CELLS, SOME_INVALID_CELLS, SOME_GAMES } from './testdata';
+
 
 describe('Canary', () => {
     it('works', () => {
@@ -11,72 +14,74 @@ describe('Canary', () => {
 }); 
 
 describe('Tic Tac Toe', () => {
-
     describe('Two Player Game', () => {
-        let game;
-
         beforeEach(() => {
-            game = createGame();
+            let mockView = {
+                display: (representation) => representation,
+                init: (model) => '',
+                game: (model) => ''
+            };
+            state.init(mockView);
+            model.init(state);
+            actions.init(model.present);
         })
 
-        it("board is empty at the start", () => {
-            expect(game.getBoard().join(EMPTY_CELL)).to.equal(EMPTY_CELL);
+        it("given a new game then all the cells should be empty", () => {
+            expect(model.cells.every(cell => cell === EMPTY_CELL)).to.equal(true);
         });
 
-        it('player one begins', () => {
-            expect(game.getCurrentPlayer()).to.equal(PLAYER_ONE);
+        it(`given a new game then player ${PLAYER_ONE} should begin`, () => {
+            expect(model.currentPlayer).to.equal(PLAYER_ONE);
         });
 
-        VALID_CELLS.forEach(([row, column]) => {
-            it(`given row: ${row} and column: ${column} then placeChecker(row, column) should return true`, () => {
-                expect(game.placeChecker(row, column)).to.equal(true); 
+        it(`given player ${PLAYER_ONE} place a checker in a cell it should contain ${CHECKER_ONE}`, () => {
+            actions.placeChecker({ position: 0 });
+
+            expect(model.cells[0]).to.equal(CHECKER_ONE);
+        });
+
+        it(`given player ${PLAYER_TWO} place a checker in a cell it should contain ${CHECKER_TWO}`, () => {
+            model.currentPlayer = PLAYER_TWO;
+
+            actions.placeChecker({ position: 0 });
+
+            expect(model.cells[0]).to.equal(CHECKER_TWO);
+        });
+
+        it(`given player ${PLAYER_ONE} has placed a checker then current player should be player ${PLAYER_TWO}`, () => {
+            actions.placeChecker({ position: 0 });
+
+            expect(model.currentPlayer).to.equal(PLAYER_TWO);
+        });
+
+        VALID_CELLS.forEach(position => {
+            it(`given a player place a checker at the position ${position} then the cell should not be empty`, () => {
+                actions.placeChecker({ position: position });
+                expect(model.cells[position]).to.not.equal(EMPTY_CELL); 
             });
         });
 
-        SOME_INVALID_CELLS.forEach(([row, column]) => {
-            it(`given row: ${row} and column: ${column} then placeChecker(row, column) should return false`, () => {
-                expect(game.placeChecker(row, column)).to.equal(false);
+        SOME_INVALID_CELLS.forEach(position => {
+            it(`given a player place a checker at the position ${position} then all the cells should be empty`, () => {
+                actions.placeChecker({ position: position });
+
+                expect(model.cells.every(cell => cell === EMPTY_CELL)).to.equal(true);
             });
         });
 
-        it('placing a checker at same position twice should return false', () => {
-            game.placeChecker(0, 0);
-            expect(game.placeChecker(0, 0)).to.equal(false);
+        it(`given a player tries to place a ${CHECKER_TWO} in a cell with a ${CHECKER_ONE} then the cell should still contain ${CHECKER_ONE}`, () => {
+            actions.placeChecker({ position: 0 });
+            actions.placeChecker({ position: 0 });
+
+            expect(model.cells[0]).to.equal(CHECKER_ONE);
         });
 
-        it(`player one place ${CHECKER_ONE}:es on the board`, () => {
-            game.placeChecker(0, 0);
-            expect(game.getBoard()[0]).to.equal(CHECKER_ONE);
-        });
+        it(`given a player tries to place a ${CHECKER_ONE} in a cell with a ${CHECKER_TWO} then the cell should still contain ${CHECKER_TWO}`, () => {
+            actions.placeChecker({ position: 0 });
+            actions.placeChecker({ position: 1 });
+            actions.placeChecker({ position: 1 });
 
-        it(`player two place ${CHECKER_TWO}:s on the board`, () => {
-            game.placeChecker(0, 0);
-            game.placeChecker(0, 1);
-            expect(game.getBoard()[1]).to.equal(CHECKER_TWO);
-        });
-
-        it("given no winner getWinner() should return null", () => {
-            expect(game.getWinner()).to.equal(null);
-        });
-
-        SOME_GAMES.forEach(({ winner, winningMove, result, moves }) => {
-            it(`given ${winner} has ${winningMove} then getWinner() should return ${result}`, () => {
-                moves.forEach(([row, column]) => {
-                    game.placeChecker(row, column);
-                });
-
-                expect(game.getWinner()).to.equal(result);
-            })
-        });
-
-        it('given a player has won then placeChecker(row, column) should return false', () => {
-            game.placeChecker(0, 0);
-            game.placeChecker(1, 0);
-            game.placeChecker(0, 1);
-            game.placeChecker(1, 1);
-            game.placeChecker(0, 2);
-            
-            expect(game.placeChecker(1, 2)).to.equal(false);
+            expect(model.cells[1]).to.equal(CHECKER_TWO);
         });
 
     });
