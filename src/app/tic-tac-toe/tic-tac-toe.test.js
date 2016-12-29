@@ -19,7 +19,7 @@ describe('Tic Tac Toe', () => {
             let mockView = {
                 display: (representation) => representation,
                 init: (model) => '',
-                game: (model) => ''
+                playing: (model) => ''
             };
             state.init(mockView);
             model.init(state);
@@ -27,7 +27,7 @@ describe('Tic Tac Toe', () => {
         })
 
         it("given a new game then all the cells should be empty", () => {
-            expect(model.cells.every(cell => cell === EMPTY_CELL)).to.equal(true);
+            expect(model.board.every(cell => cell === EMPTY_CELL)).to.equal(true);
         });
 
         it(`given a new game then player ${PLAYER_ONE} should begin`, () => {
@@ -37,7 +37,7 @@ describe('Tic Tac Toe', () => {
         it(`given player ${PLAYER_ONE} place a checker in a cell it should contain ${CHECKER_ONE}`, () => {
             actions.placeChecker({ position: 0 });
 
-            expect(model.cells[0]).to.equal(CHECKER_ONE);
+            expect(model.board[0]).to.equal(CHECKER_ONE);
         });
 
         it(`given player ${PLAYER_TWO} place a checker in a cell it should contain ${CHECKER_TWO}`, () => {
@@ -45,7 +45,7 @@ describe('Tic Tac Toe', () => {
 
             actions.placeChecker({ position: 0 });
 
-            expect(model.cells[0]).to.equal(CHECKER_TWO);
+            expect(model.board[0]).to.equal(CHECKER_TWO);
         });
 
         it(`given player ${PLAYER_ONE} has placed a checker then current player should be player ${PLAYER_TWO}`, () => {
@@ -57,7 +57,7 @@ describe('Tic Tac Toe', () => {
         VALID_CELLS.forEach(position => {
             it(`given a player place a checker at the position ${position} then the cell should not be empty`, () => {
                 actions.placeChecker({ position: position });
-                expect(model.cells[position]).to.not.equal(EMPTY_CELL); 
+                expect(model.board[position]).to.not.equal(EMPTY_CELL); 
             });
         });
 
@@ -65,7 +65,7 @@ describe('Tic Tac Toe', () => {
             it(`given a player place a checker at the position ${position} then all the cells should be empty`, () => {
                 actions.placeChecker({ position: position });
 
-                expect(model.cells.every(cell => cell === EMPTY_CELL)).to.equal(true);
+                expect(model.board.every(cell => cell === EMPTY_CELL)).to.equal(true);
             });
         });
 
@@ -73,7 +73,7 @@ describe('Tic Tac Toe', () => {
             actions.placeChecker({ position: 0 });
             actions.placeChecker({ position: 0 });
 
-            expect(model.cells[0]).to.equal(CHECKER_ONE);
+            expect(model.board[0]).to.equal(CHECKER_ONE);
         });
 
         it(`given a player tries to place a ${CHECKER_ONE} in a cell with a ${CHECKER_TWO} then the cell should still contain ${CHECKER_TWO}`, () => {
@@ -81,7 +81,7 @@ describe('Tic Tac Toe', () => {
             actions.placeChecker({ position: 1 });
             actions.placeChecker({ position: 1 });
 
-            expect(model.cells[1]).to.equal(CHECKER_TWO);
+            expect(model.board[1]).to.equal(CHECKER_TWO);
         });
 
     });

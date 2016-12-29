@@ -57,7 +57,6 @@ module.exports = (env) => {
     config.devServer = {
         contentBase: path.resolve(__dirname, 'build'),
         inline: false,
-        hot: true,
         port: 9000
     };
 
