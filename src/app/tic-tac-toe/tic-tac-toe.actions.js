@@ -10,3 +10,11 @@ actions.placeChecker = (data, present) => {
     present(data);
     return false;
 };
+
+actions.reset = (data, present) => {
+    present = present || actions.present;
+    data = data || {};
+    data.reseting = true;
+    present(data);
+    return false;
+}

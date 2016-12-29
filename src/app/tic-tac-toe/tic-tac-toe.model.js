@@ -21,7 +21,7 @@ export const WINNING_POSITIONS = [
 export let model = {};
 
 model.init = (state) => {
-    model.state = state;
+    model.state = state || model.state;
     model.board = BOARD.slice();
     model.currentPlayer = PLAYER_ONE;
     model.playerCheckers = [CHECKER_ONE, CHECKER_TWO];
@@ -50,7 +50,6 @@ model.present = (data) => {
     if (model.state.playing(model)) {
         if (model.isCell(data.position) && model.isEmptyCell(data.position)) {
             model.board[data.position] = model.playerCheckers[model.currentPlayer];
-            model.currentPlayer = model.nextPlayer();
         }
 
         model.winningPositions = WINNING_POSITIONS
@@ -60,6 +59,19 @@ model.present = (data) => {
                 model.board[positions[0]] === model.board[positions[2]];
             })
             .reduce(model.flatten, []);
+
+        if (model.winningPositions.length > 0 ) {
+            model.gameOver = true;
+        } else if (!model.board.some(cell => cell === EMPTY_CELL)) {
+            model.gameOver = true;
+            model.draw = true;
+        } else {
+            model.currentPlayer = model.nextPlayer();
+        }
+    } else if (model.state.gameOver(model)) {
+        if (data.reseting) {
+            model.init();
+        }
     }
 
     model.state.render(model);

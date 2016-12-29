@@ -5,11 +5,11 @@ export let state = {};
 state.init = (view) => state.view = view;
 
 state.playing = (model) => {
-    return model.draw === false;
+    return model.gameOver === false;
 };
 
-state.draw = (model) => {
-    return model.draw === true;
+state.gameOver = (model) => {
+    return model.gameOver === true;
 }
 
 state.representation = (model) => {
@@ -17,6 +17,10 @@ state.representation = (model) => {
 
     if (state.playing(model)) {
         representation = state.view.playing(model);
+    }
+
+    if (state.gameOver(model)) {
+        representation = state.view.gameOver(model);
     }
 
     state.view.display(representation);
