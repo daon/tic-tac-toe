@@ -18,6 +18,26 @@ export const WINNING_POSITIONS = [
     [2, 4, 6]
 ];
 
+let isCell = (board, position) => {
+    return position >= 0 && position < board.length;
+};
+
+let isEmptyCell = (board, position) => {
+    return board[position] === EMPTY_CELL;
+};
+
+let nextPlayer = (currentPlayer) => {
+    return currentPlayer ? PLAYER_ONE : PLAYER_TWO;
+};
+
+let flatten = (a, b) => {
+    return a.concat(b);
+};
+
+let randomPosition = (board) => {
+    return Math.floor((Math.random() * board.length));
+};
+
 export let model = {};
 
 model.init = (state) => {
@@ -30,25 +50,9 @@ model.init = (state) => {
     model.draw = false;
 } 
 
-model.isCell = (position) => {
-    return position >= 0 && position < model.board.length;
-};
-
-model.isEmptyCell = (position) => {
-    return model.board[position] === EMPTY_CELL;
-};
-
-model.nextPlayer = () => {
-    return model.currentPlayer ? PLAYER_ONE : PLAYER_TWO;
-}
-
-model.flatten = (a, b) => {
-    return a.concat(b);
-}
-
 model.present = (data) => {
     if (model.state.playing(model)) {
-        if (model.isCell(data.position) && model.isEmptyCell(data.position)) {
+        if (isCell(model.board, data.position) && isEmptyCell(model.board, data.position)) {
             model.board[data.position] = model.playerCheckers[model.currentPlayer];
         }
 
@@ -58,7 +62,7 @@ model.present = (data) => {
                 model.board[positions[0]] === model.board[positions[1]] &&
                 model.board[positions[0]] === model.board[positions[2]];
             })
-            .reduce(model.flatten, []);
+            .reduce(flatten, []);
 
         if (model.winningPositions.length > 0 ) {
             model.gameOver = true;
@@ -66,7 +70,7 @@ model.present = (data) => {
             model.gameOver = true;
             model.draw = true;
         } else {
-            model.currentPlayer = model.nextPlayer();
+            model.currentPlayer = nextPlayer(model.currentPlayer);
         }
     } else if (model.state.gameOver(model)) {
         if (data.reseting) {
