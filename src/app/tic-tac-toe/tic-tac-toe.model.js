@@ -1,5 +1,4 @@
 'use strict';
-
 export const BOARD_SIZE = 3;
 export const EMPTY_CELL = '';
 export const CHECKER_ONE = 'X';
@@ -26,17 +25,47 @@ let isEmptyCell = (board, position) => {
     return board[position] === EMPTY_CELL;
 };
 
-let nextPlayer = (currentPlayer) => {
-    return currentPlayer ? PLAYER_ONE : PLAYER_TWO;
+let isFullBoard = (board) => {
+    return board.every(cell => cell !== EMPTY_CELL && (cell === CHECKER_ONE || cell === CHECKER_TWO));
 };
 
 let flatten = (a, b) => {
     return a.concat(b);
 };
 
+let getWinningPositions = (board) => {
+    return WINNING_POSITIONS
+            .filter(positions => {
+                return board[positions[0]] !== EMPTY_CELL &&
+                board[positions[0]] === board[positions[1]] &&
+                board[positions[0]] === board[positions[2]];
+            })
+            .reduce(flatten, []);
+};
+
+let nextPlayer = (currentPlayer) => {
+    return currentPlayer ? PLAYER_ONE : PLAYER_TWO;
+};
+
 let randomPosition = (board) => {
     return Math.floor((Math.random() * board.length));
 };
+
+let currentBestPosition = (board) => {
+
+};
+
+let choosePosition = (board) => {
+    if (board.every(cell => cell === EMPTY_CELL)) {
+        return randomPosition(board);
+    }
+
+    if (board.filter(cell => cell === EMPTY_CELL).length === 1) {
+        return board.indexOf(EMPTY_CELL);
+    }
+
+    return currentBestPosition(board);
+}
 
 export let model = {};
 
@@ -44,9 +73,9 @@ model.init = (state) => {
     model.state = state || model.state;
     model.board = BOARD.slice();
     model.currentPlayer = PLAYER_ONE;
+    model.computer = PLAYER_TWO;
     model.playerCheckers = [CHECKER_ONE, CHECKER_TWO];
     model.winningPositions = [];
-    model.gameOver = false;
     model.draw = false;
 } 
 
@@ -56,22 +85,11 @@ model.present = (data) => {
             model.board[data.position] = model.playerCheckers[model.currentPlayer];
         }
 
-        model.winningPositions = WINNING_POSITIONS
-            .filter(positions => {
-                return model.board[positions[0]] !== EMPTY_CELL &&
-                model.board[positions[0]] === model.board[positions[1]] &&
-                model.board[positions[0]] === model.board[positions[2]];
-            })
-            .reduce(flatten, []);
+        model.winningPositions = getWinningPositions(model.board);
 
-        if (model.winningPositions.length > 0 ) {
-            model.gameOver = true;
-        } else if (!model.board.some(cell => cell === EMPTY_CELL)) {
-            model.gameOver = true;
-            model.draw = true;
-        } else {
-            model.currentPlayer = nextPlayer(model.currentPlayer);
-        }
+        model.draw = isFullBoard(model.board); 
+
+        model.currentPlayer = nextPlayer(model.currentPlayer);
     } else if (model.state.gameOver(model)) {
         if (data.reseting) {
             model.init();
