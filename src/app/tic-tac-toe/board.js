@@ -1,7 +1,7 @@
 export const BOARD_SIZE = 3;
-export const EMPTY_CELL = '';
-export const CHECKER_ONE = 'X';
-export const CHECKER_TWO = 'O';
+export const EMPTY = '';
+export const CROSS = 'X';
+export const NOUGHT = 'O';
 export const WINNING_POSITIONS = [
     [0, 1, 2],
     [3, 4, 5],
@@ -15,29 +15,31 @@ export const WINNING_POSITIONS = [
 
 export function createBoard(currentChecker) {
     let board = {};
-    let cells = new Array(BOARD_SIZE*BOARD_SIZE).fill(EMPTY_CELL);
+    let cells = new Array(BOARD_SIZE*BOARD_SIZE).fill(EMPTY);
     let winningPositions = [];
 
-    if (currentChecker !== CHECKER_ONE && currentChecker !== CHECKER_TWO) {
-        currentChecker = CHECKER_ONE;
+    if (currentChecker !== CROSS && currentChecker !== NOUGHT) {
+        currentChecker = CROSS;
     }
 
     board.getCells = () => cells.splice();
 
+    board.getCurrentChecker = () => currentChecker;
+
     board.isCell = (position) => position >= 0 && position < cells.length;
 
-    board.isEmptyCell = (position) => cells[position] === EMPTY_CELL;
+    board.isEmptyCell = (position) => cells[position] === EMPTY;
 
     board.hasWinningPositions = () => winningPositions.length > 0;
 
     board.isFull = () => cells
-        .every(cell => cell !== EMPTY_CELL && (cell === CHECKER_ONE || cell === CHECKER_TWO));
+        .every(cell => cell !== EMPTY && (cell === CROSS || cell === NOUGHT));
 
     board.getWinningPositions = () => {
         if (!board.hasWinningPositions()) {
          winningPositions = WINNING_POSITIONS
             .filter(positions => {
-                return cells[positions[0]] !== EMPTY_CELL &&
+                return cells[positions[0]] !== EMPTY &&
                 cells[positions[0]] === cells[positions[1]] &&
                 cells[positions[0]] === cells[positions[2]];
             })
@@ -47,13 +49,13 @@ export function createBoard(currentChecker) {
         return winningPositions.splice();
     }
 
-    board.placeNextChecker = (position) => {
+    board.placeChecker = (position,) => {
         if(!board.isCell(position) || !board.isEmptyCell(position) || board.isFull() || board.hasWinningPositions()) {
             return false;
         }
 
         cells[position] = currentChecker;
-        currentChecker = currentChecker === CHECKER_ONE ? CHECKER_TWO : CHECKER_ONE;
+        currentChecker = currentChecker === CROSS ? NOUGHT : CROSS;
         return true;
     }
 
