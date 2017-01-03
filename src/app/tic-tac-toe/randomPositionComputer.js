@@ -1,10 +1,19 @@
-export let computer = {};
+import { EMPTY } from './board';
 
-computer.getMove = (model) => {
+export function getNextComputerMove(board) {
+    let emptyPositions = board
+        .map((cell, position) => {
+            if (cell === EMPTY) {
+                return position;
+            }
+            return null;
+        })
+        .filter(position => position !== null);
+
     let data = {};
-    do {
-        data.position = Math.floor(Math.random() * model.board.length);
-    } while(!model.isEmptyCell(data.position))
+    if (emptyPositions.length > 0) {
+        data.position = emptyPositions[Math.floor(Math.random() * emptyPositions.length)];
+    }
 
     return data;
-};
+}

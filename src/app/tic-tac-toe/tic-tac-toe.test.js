@@ -1,11 +1,23 @@
 'use strict';
 import { describe, it, beforeEach } from 'mocha';
 import { expect } from 'chai';
-// import { state } from './tic-tac-toe.state';
-// import { model, EMPTY_CELL, PLAYER_ONE, PLAYER_TWO, CHECKER_ONE, CHECKER_TWO } from './tic-tac-toe.model';
-// import { actions } from './tic-tac-toe.actions';
-// import { VALID_CELLS, SOME_INVALID_CELLS, SOME_GAMES } from './testdata';
-import { createBoard, EMPTY_CELL, CHECKER_ONE, CHECKER_TWO } from './board';
+import { 
+    createEmptyBoard, 
+    isEmptyCell,
+    isCheckedCell,
+    countCheckers,
+    isFullBoard,
+    getCurrentPlayer,
+    getComputerChecker,
+    getWinningPositions,
+    isWinner,
+    isLoser,
+    EMPTY,
+    CROSS,
+    NOUGHT,
+    USER,
+    COMPUTER
+} from './board';
 
 describe('Canary', () => {
     it('works', () => {
@@ -14,101 +26,249 @@ describe('Canary', () => {
 }); 
 
 describe('Tic Tac Toe', () => {
+    let board;
 
-    describe('board', () => {
-        let board;
-        beforeEach(() => {
-            board = createBoard();
-        })
-
-        it("given a new board then all the cells should be empty", () => {
-            expect(board.getCells().every(cell => cell === EMPTY_CELL)).to.equal(true);
-        });
-
-        it(`given a new board then checker ${CHECKER_ONE} should begin`, () => {
-            expect(board.getCurrentChecker()).to.equal(CHECKER_ONE);
-        });
-
-        it(`given a new board and currentChecker is set to ${CHECKER_TWO} then checker ${CHECKER_TWO} should begin`, () => {
-            board = createBoard(CHECKER_TWO);
-            expect(board.getCurrentChecker()).to.equal(CHECKER_TWO);
-        });
-
-        // it(`given player ${PLAYER_ONE} place a checker in a cell it should contain ${CHECKER_ONE}`, () => {
-        //     actions.placeChecker({ position: 0 });
-
-        //     expect(model.board[0]).to.equal(CHECKER_ONE);
-        // });
+    beforeEach(() => {
+        board = createEmptyBoard();
     });
+    describe('board', () => {
+        describe('createEmptyBoard', () => {
+        
+            it('should return an array', () => {
+                expect(board).to.be.a('array');
+            });
 
+            it('should have a length of 9', () => {
+                expect(board.length).to.equal(9);
+            });
 
-    // beforeEach(() => {
-    //     let mockView = {
-    //         display: (representation) => representation,
-    //         init: (model) => '',
-    //         playing: (model) => ''
-    //     };
-    //     state.init(mockView);
-    //     model.init(state);
-    //     actions.init(model.present);
-    // })
+            it('should contain empty cells', () => {
+                expect(board.every(cell => cell === EMPTY)).to.equal(true);
+            });
+        });
 
-    
+        describe('isEmptyCell', () => {
+            
+            it('should return true if cell is empty', () => {
+                expect(isEmptyCell(board, 0)).to.equal(true);
+            });
 
-    // it(`given a new game then player ${PLAYER_ONE} should begin`, () => {
-    //     expect(model.currentPlayer).to.equal(PLAYER_ONE);
-    // });
+            it('should return false if cell is not empty', () => {
+                board[0] = CROSS;
+                expect(isEmptyCell(board, 0)).to.equal(false);
+            });
 
-    // it(`given player ${PLAYER_ONE} place a checker in a cell it should contain ${CHECKER_ONE}`, () => {
-    //     actions.placeChecker({ position: 0 });
+            it('should return false if position is outside the board', () => {
+                expect(isEmptyCell(board, -1)).to.equal(false);
+            });
+        });
 
-    //     expect(model.board[0]).to.equal(CHECKER_ONE);
-    // });
+        describe('isCheckedCell', () => {
 
-    // it(`given player ${PLAYER_TWO} place a checker in a cell it should contain ${CHECKER_TWO}`, () => {
-    //     model.currentPlayer = PLAYER_TWO;
+            it(`should return true if cell contains ${CROSS}`, () => {
+                board[0] = CROSS;
+                expect(isCheckedCell(board, 0)).to.equal(true);
+            });
 
-    //     actions.placeChecker({ position: 0 });
+            it(`should return true if cell contains ${NOUGHT}`, () => {
+                board[0] = NOUGHT;
+                expect(isCheckedCell(board, 0)).to.equal(true);
+            });
 
-    //     expect(model.board[0]).to.equal(CHECKER_TWO);
-    // });
+            it(`should return false if cell is empty`, () => {
+                expect(isCheckedCell(board, 0)).to.equal(false);
+            });
 
-    // it(`given player ${PLAYER_ONE} has placed a checker then current player should be player ${PLAYER_TWO}`, () => {
-    //     actions.placeChecker({ position: 0 });
+            it('should return false if position is outside the board', () => {
+                expect(isCheckedCell(board, -1)).to.equal(false);
+            });
+        });
 
-    //     expect(model.currentPlayer).to.equal(PLAYER_TWO);
-    // });
+        describe('countCheckers', () => {
 
-    // VALID_CELLS.forEach(position => {
-    //     it(`given a player place a checker at the position ${position} then the cell should not be empty`, () => {
-    //         actions.placeChecker({ position: position });
-    //         expect(model.board[position]).to.not.equal(EMPTY_CELL); 
-    //     });
-    // });
+            it(`should return 0 if board is empty and counting ${CROSS}`, () => {
+                expect(countCheckers(board, CROSS)).to.equal(0);
+            });
 
-    // SOME_INVALID_CELLS.forEach(position => {
-    //     it(`given a player place a checker at the position ${position} then all the cells should be empty`, () => {
-    //         actions.placeChecker({ position: position });
+            it(`should return 0 if board is empty and counting ${NOUGHT}`, () => {
+                expect(countCheckers(board, NOUGHT)).to.equal(0);
+            });
 
-    //         expect(model.board.every(cell => cell === EMPTY_CELL)).to.equal(true);
-    //     });
-    // });
+            it(`should return 3 if board contains 3 ${CROSS} and 2 ${NOUGHT} and counting ${CROSS}`, () => {
+                board[0] = CROSS;
+                board[1] = NOUGHT;
+                board[4] = NOUGHT;
+                board[5] = CROSS;
+                board[7] = CROSS;
+                expect(countCheckers(board, CROSS)).to.equal(3);
+            });
 
-    // it(`given a player tries to place a ${CHECKER_TWO} in a cell with a ${CHECKER_ONE} then the cell should still contain ${CHECKER_ONE}`, () => {
-    //     actions.placeChecker({ position: 0 });
-    //     actions.placeChecker({ position: 0 });
+            it(`should return 2 if board contains 3 ${CROSS} and 2 ${NOUGHT} and counting ${NOUGHT}`, () => {
+                board[0] = CROSS;
+                board[1] = NOUGHT;
+                board[4] = NOUGHT;
+                board[5] = CROSS;
+                board[7] = CROSS;
+                expect(countCheckers(board, NOUGHT)).to.equal(2);
+            });
 
-    //     expect(model.board[0]).to.equal(CHECKER_ONE);
-    // });
+        });
 
-    // it(`given a player tries to place a ${CHECKER_ONE} in a cell with a ${CHECKER_TWO} then the cell should still contain ${CHECKER_TWO}`, () => {
-    //     actions.placeChecker({ position: 0 });
-    //     actions.placeChecker({ position: 1 });
-    //     actions.placeChecker({ position: 1 });
+        describe('isFullBoard', () => {
 
-    //     expect(model.board[1]).to.equal(CHECKER_TWO);
-    // });
+            it('should return true when every cell is checked', () => {
+                board = [CROSS, NOUGHT, NOUGHT, CROSS, NOUGHT, CROSS, NOUGHT, CROSS, NOUGHT];
+                expect(isFullBoard(board)).to.equal(true);
+            });
 
-    // it('given and')
+            it('should return false when every cell is empty', () => {
+                expect(isFullBoard(board)).to.equal(false);
+            });
 
+            it('should return false when some cells are checked', () => {
+                board[0] = CROSS;
+                board[1] = NOUGHT;
+                board[4] = NOUGHT;
+                board[5] = CROSS;
+                board[7] = CROSS;
+                expect(isFullBoard(board)).to.equal(false);
+            });
+
+        });
+
+        describe('getCurrentPlayer', () => {
+            
+            it(`should return ${USER} when board is empty`, () => {
+                expect(getCurrentPlayer(board)).to.equal(USER);
+            });
+
+            it(`should return ${USER} when board contains equal amount of ${CROSS} and ${NOUGHT}`, () => {
+                board[0] = CROSS;
+                board[1] = NOUGHT;
+                expect(getCurrentPlayer(board)).to.equal(USER);
+            });
+
+            it(`should return ${COMPUTER} when board contains different amount of ${CROSS} and ${NOUGHT}`, () => {
+                board[0] = CROSS;
+                expect(getCurrentPlayer(board)).to.equal(COMPUTER);
+            });
+        });
+
+        describe('getComputerChecker', () => {
+            
+            it(`should return "${EMPTY}" when board is empty`, () => {
+                expect(getComputerChecker(board)).to.equal(EMPTY);
+            });
+
+            it(`should return "${EMPTY}" when board contains equal amount of ${CROSS} and ${NOUGHT}`, () => {
+                board[0] = CROSS;
+                board[1] = NOUGHT;
+                expect(getComputerChecker(board)).to.equal(EMPTY);
+            });
+
+            it(`should return ${CROSS} when board contains less amount of ${CROSS} then ${NOUGHT}`, () => {
+                board[0] = NOUGHT;
+                expect(getComputerChecker(board)).to.equal(CROSS);
+            });
+
+            it(`should return ${NOUGHT} when board contains less amount of ${NOUGHT} then ${CROSS}`, () => {
+                board[0] = CROSS;
+                expect(getComputerChecker(board)).to.equal(NOUGHT);
+            });
+        });
+
+        describe('getWinningPositions', () => {
+            
+            it('should return an array', () => {
+                expect(getWinningPositions(board)).to.be.a('array');
+            });
+
+            it('should have a length of 0 when board is empty', () => {
+                expect(getWinningPositions(board).length).to.equal(0);
+            });
+                        
+            it(`should have a length of 0 when board contains checkers but not in winning positions`, () => {
+                board[0] = CROSS;
+                board[1] = NOUGHT;
+                board[2] = CROSS;
+                expect(getWinningPositions(board).length).to.equal(0);
+            });
+
+            it(`should have a length of 3 when board have three of the same checker in a row`, () => {
+                board[0] = CROSS;
+                board[1] = CROSS;
+                board[2] = CROSS;
+                expect(getWinningPositions(board).length).to.equal(3);
+            });
+
+            it(`should have a length of 3 when board have three of the same checker in a column`, () => {
+                board[0] = CROSS;
+                board[3] = CROSS;
+                board[6] = CROSS;
+                expect(getWinningPositions(board).length).to.equal(3);
+            });
+
+            it(`should have a length of 3 when board have three of the same checker in a diagnoal`, () => {
+                board[0] = CROSS;
+                board[4] = CROSS;
+                board[8] = CROSS;
+                expect(getWinningPositions(board).length).to.equal(3);
+            });
+        });
+
+        describe('isWinner', () => {
+            it('should be false when board is empty', () => {
+                expect(isWinner(board, CROSS)).to.equal(false);
+            });
+
+            it(`should  be false when board contains checkers but not in winning positions`, () => {
+                board[0] = CROSS;
+                board[1] = NOUGHT;
+                board[2] = CROSS;
+                expect(isWinner(board, CROSS)).to.equal(false);
+            });
+
+            it('should be true when board is contains winning positions for given checker', () => {
+                board[0] = CROSS;
+                board[1] = CROSS;
+                board[2] = CROSS;
+                expect(isWinner(board, CROSS)).to.equal(true);
+            });
+
+            it('should be false when board is contains winning positions but not for given checker', () => {
+                board[0] = CROSS;
+                board[1] = CROSS;
+                board[2] = CROSS;
+                expect(isWinner(board, NOUGHT)).to.equal(false);
+            });
+        });
+
+        describe('isLoser', () => {
+            it('should be false when board is empty', () => {
+                expect(isLoser(board, CROSS)).to.equal(false);
+            });
+
+            it(`should  be false when board contains checkers but not in winning positions`, () => {
+                board[0] = CROSS;
+                board[1] = NOUGHT;
+                board[2] = CROSS;
+                expect(isLoser(board, CROSS)).to.equal(false);
+            });
+
+            it('should be false when board is contains winning positions for given checker', () => {
+                board[0] = CROSS;
+                board[1] = CROSS;
+                board[2] = CROSS;
+                expect(isLoser(board, CROSS)).to.equal(false);
+            });
+
+            it('should be true when board is contains winning positions but not for given checker', () => {
+                board[0] = CROSS;
+                board[1] = CROSS;
+                board[2] = CROSS;
+                expect(isLoser(board, NOUGHT)).to.equal(true);
+            });
+        });
+
+    });  
 });

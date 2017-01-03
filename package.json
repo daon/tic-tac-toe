@@ -8,7 +8,9 @@
   },
   "scripts": {
     "test": "mocha \"src/**/*.test.js\" --require babel-register --require test/setup.js",
+    "prestart": "yarn test",
     "start": "webpack-dev-server --progress --profile --watch --open",
+    "prebuild": "yarn test",
     "build": "webpack --progress --profile --env=PROD",
     "predeploy": "yarn build",
     "deploy": "gh-pages -d build"

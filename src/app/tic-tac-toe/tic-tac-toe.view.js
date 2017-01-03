@@ -1,14 +1,24 @@
 'use strict';
-import { BOARD_SIZE } from './tic-tac-toe.model';
+import { BOARD_SIZE, CROSS, NOUGHT } from './board';
 
 export let view = {};
 
-view.init = (model) => view.userPlaying(model);
+view.init = (model) => view.ready(model);
 
 view.display = (representation) => {
     const app = document.getElementById('tic-tac-toe');
     app.innerHTML = representation;
 };
+
+view.ready = (model) => {
+    let representation = `
+        <button type="button" class="btn" onclick="actions.setUserChecker({ userChecker: '${CROSS}' })">${CROSS}</button>
+        <span>or</span>
+        <button type="button" class="btn" onclick="actions.setUserChecker({ userChecker: '${NOUGHT}' })">${NOUGHT}</button>
+    `;
+
+    return representation;
+}
 
 view.userPlaying = (model) => {
     let representation = `<div class="player">Your turn!</div>`;

@@ -4,6 +4,14 @@ export let actions = {};
 
 actions.init = (present) => actions.present = present;
 
+actions.setUserChecker = (data, present) => {
+    console.log('action: setUserChecker');
+    present = present || actions.present;
+    data = data || {};
+    present(data);
+    return false;
+};
+
 actions.userMove = (data, present) => {
     console.log('action: userMove');
     present = present || actions.present;
@@ -24,9 +32,13 @@ actions.computerMove = (data, present) => {
 }
 
 actions.reset = (data, present) => {
+    console.log('action: reset');
     present = present || actions.present;
-    data = data || {};
+    data = data || {};
     data.reseting = true;
-    present(data);
-    return false;
+    let d = data;
+    let p = present;
+    setTimeout(() => {
+        p(d);
+    }, 1000);
 }
