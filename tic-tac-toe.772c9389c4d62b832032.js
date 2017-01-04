@@ -187,17 +187,17 @@ actions.setUserChecker = function (data, present) {
 };
 
 actions.userMove = function (data, present) {
-    console.log('action: userMove');
     present = present || actions.present;
     data = data || {};
+    console.log('action: userMove ' + data.position);
     present(data);
     return false;
 };
 
 actions.computerMove = function (data, present) {
-    console.log('action: computerMove');
     present = present || actions.present;
     data = data || {};
+    console.log('action: computerMove ' + data.position);
     var d = data;
     var p = present;
     setTimeout(function () {
@@ -256,23 +256,22 @@ window.actions = _ticTacToe4.actions;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.PREFERED_POSITIONS = undefined;
 exports.getNextComputerMove = getNextComputerMove;
 
 var _board = __webpack_require__(0);
 
+var PREFERED_POSITIONS = exports.PREFERED_POSITIONS = [4, 0, 2, 6, 8, 1, 3, 5, 7];
+
 function getNextComputerMove(board) {
-    var emptyPositions = board.map(function (cell, position) {
-        if (cell === _board.EMPTY) {
-            return position;
-        }
-        return null;
-    }).filter(function (position) {
-        return position !== null;
-    });
 
     var data = {};
-    if (emptyPositions.length > 0) {
-        data.position = emptyPositions[Math.floor(Math.random() * emptyPositions.length)];
+    var preferedPositions = PREFERED_POSITIONS.filter(function (position) {
+        return board[position] === _board.EMPTY;
+    });
+
+    if (preferedPositions.length > 0) {
+        data.position = preferedPositions[0];
     }
 
     return data;
@@ -315,7 +314,7 @@ model.present = function (data) {
         if ((0, _board.isEmptyCell)(model.board, data.position)) {
             model.board[data.position] = (0, _board.getComputerChecker)(model.board);
         }
-    } else if (model.state.winner(model) || model.state.loser(model) || model.state.draw(model)) {
+    } else if (model.state.winner(model) || model.state.loser(model) || model.state.tie(model)) {
         if (data.reseting) {
             model.board = (0, _board.createEmptyBoard)();
             model.userChecker = null;
@@ -338,10 +337,11 @@ exports.state = undefined;
 
 var _board = __webpack_require__(0);
 
-var _randomPositionComputer = __webpack_require__(4);
+var _preferedPositionComputer = __webpack_require__(4);
 
 var _ticTacToe = __webpack_require__(1);
 
+// import { getNextComputerMove } from './randomPositionComputer';
 var state = exports.state = {};
 
 state.init = function (view) {
@@ -368,7 +368,7 @@ state.loser = function (model) {
     return (0, _board.isWinner)(model.board, model.userChecker) === false && (0, _board.isLoser)(model.board, model.userChecker) === true;
 };
 
-state.draw = function (model) {
+state.tie = function (model) {
     return (0, _board.isWinner)(model.board, model.userChecker) === false && (0, _board.isLoser)(model.board, model.userChecker) === false && (0, _board.isFullBoard)(model.board) === true;
 };
 
@@ -400,9 +400,9 @@ state.representation = function (model) {
         representation = state.view.loser(model);
     }
 
-    if (state.draw(model)) {
-        console.log('state: draw');
-        representation = state.view.draw(model);
+    if (state.tie(model)) {
+        console.log('state: tie');
+        representation = state.view.tie(model);
     }
 
     state.view.display(representation);
@@ -410,10 +410,10 @@ state.representation = function (model) {
 
 state.nextAction = function (model) {
     if (state.computerPlaying(model)) {
-        _ticTacToe.actions.computerMove((0, _randomPositionComputer.getNextComputerMove)(model.board), model.present);
+        _ticTacToe.actions.computerMove((0, _preferedPositionComputer.getNextComputerMove)(model.board), model.present);
     }
 
-    if (state.winner(model) || state.loser(model) || state.draw(model)) {
+    if (state.winner(model) || state.loser(model) || state.tie(model)) {
         _ticTacToe.actions.reset({}, model.present);
     }
 };
@@ -449,13 +449,13 @@ view.display = function (representation) {
 };
 
 view.ready = function (model) {
-    var representation = '\n        <button type="button" class="btn" onclick="actions.setUserChecker({ userChecker: \'' + _board.CROSS + '\' })">' + _board.CROSS + '</button>\n        <span>or</span>\n        <button type="button" class="btn" onclick="actions.setUserChecker({ userChecker: \'' + _board.NOUGHT + '\' })">' + _board.NOUGHT + '</button>\n    ';
+    var representation = '\n        <p>What checker would you like to use?</p>\n        <button type="button" class="btn" onclick="actions.setUserChecker({ userChecker: \'' + _board.CROSS + '\' })">' + _board.CROSS + '</button>\n        <span>or</span>\n        <button type="button" class="btn" onclick="actions.setUserChecker({ userChecker: \'' + _board.NOUGHT + '\' })">' + _board.NOUGHT + '</button>\n    ';
 
     return representation;
 };
 
 view.userPlaying = function (model) {
-    var representation = '<div class="player">Your turn!</div>';
+    var representation = '<div class="label label-player">Your turn!</div>';
     for (var i = 0; i < model.board.length; i++) {
         if (i % _board.BOARD_SIZE === 0) {
             representation += '<div class="row">';
@@ -471,7 +471,7 @@ view.userPlaying = function (model) {
 };
 
 view.computerPlaying = function (model) {
-    var representation = '<div class="player">Computers turn!</div>';
+    var representation = '<div class="label label-player">Computers turn!</div>';
     for (var i = 0; i < model.board.length; i++) {
         if (i % _board.BOARD_SIZE === 0) {
             representation += '<div class="row">';
@@ -487,17 +487,67 @@ view.computerPlaying = function (model) {
 };
 
 view.winner = function (model) {
-    var representation = '<div class="player">You won!!</div>';
+    var winningPositions = (0, _board.getWinningPositions)(model.board);
+    var representation = '<div class="label label-winner">You won!!</div>';
+
+    var _loop = function _loop(i) {
+        if (i % _board.BOARD_SIZE === 0) {
+            representation += '<div class="row">';
+        }
+
+        var cellClasses = winningPositions.some(function (position) {
+            return position === i;
+        }) ? 'cell highlighted' : 'cell';
+        representation += '<div class="' + cellClasses + '">' + model.board[i] + '</div>';
+
+        if (i % _board.BOARD_SIZE === _board.BOARD_SIZE - 1) {
+            representation += '</div>';
+        }
+    };
+
+    for (var i = 0; i < model.board.length; i++) {
+        _loop(i);
+    }
     return representation;
 };
 
 view.loser = function (model) {
-    var representation = '<div class="player">Loser!!!</div>';
+    var winningPositions = (0, _board.getWinningPositions)(model.board);
+    var representation = '<div class="label label-loser">Loser!!!</div>';
+
+    var _loop2 = function _loop2(i) {
+        if (i % _board.BOARD_SIZE === 0) {
+            representation += '<div class="row">';
+        }
+        var cellClasses = winningPositions.some(function (position) {
+            return position === i;
+        }) ? 'cell highlighted' : 'cell';
+        representation += '<div class="' + cellClasses + '">' + model.board[i] + '</div>';
+
+        if (i % _board.BOARD_SIZE === _board.BOARD_SIZE - 1) {
+            representation += '</div>';
+        }
+    };
+
+    for (var i = 0; i < model.board.length; i++) {
+        _loop2(i);
+    }
     return representation;
 };
 
-view.draw = function (model) {
-    var representation = '<div class="player">It was a draw</div>';
+view.tie = function (model) {
+    var representation = '<div class="label label-tie">It was a tie!</div>';
+    for (var i = 0; i < model.board.length; i++) {
+        if (i % _board.BOARD_SIZE === 0) {
+            representation += '<div class="row">';
+        }
+
+        representation += '<div class="cell">' + model.board[i] + '</div>';
+
+        if (i % _board.BOARD_SIZE === _board.BOARD_SIZE - 1) {
+            representation += '</div>';
+        }
+    }
     return representation;
 };
 

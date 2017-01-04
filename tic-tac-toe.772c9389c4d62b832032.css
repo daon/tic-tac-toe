@@ -1,0 +1,100 @@
+html, body {
+    height: 100%;
+    background: linear-gradient(90deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+    color: #fff;     
+}
+
+body {
+    font-family: 'Press Start 2P', cursive;
+    line-height: 1.4rem;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 1.4rem;
+    margin: 1rem;
+    text-transform: uppercase;
+    color: #36ebff;
+    text-shadow: 5px 4px 0px #000;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.row {
+    display: flex;
+    border-bottom: 5px solid #333;
+}
+
+.row:last-child {
+    border: none;
+}
+
+.cell {
+    height: 100px;
+    width: 100px;
+    flex: 1;
+    border-right: 5px solid #333;
+    font-size: 1.6rem;
+    line-height: 100px;
+    text-shadow: 5px 4px 0px #000;
+}
+
+.cell.highlighted {
+    background: #000;
+}
+
+.cell:last-child {
+    border: none;
+}
+
+.cell:hover {
+    cursor: pointer;
+}
+
+.label {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 3px 3px 0 #000;
+}
+
+.label.label-player {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.label.label-winner {
+    background: rgba(0, 255, 0, 0.5);
+}
+
+.label.label-loser {
+    background: rgba(255, 0, 0, 0.5);
+}
+
+.label.label-tie {
+    background: rgba(0, 0, 255, 0.5);
+}
+
+.btn {
+    font-family: 'Press Start 2P', cursive;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 10px;
+    color: #fff;   
+    text-shadow: 5px 2px 0px #000;
+    font-size: 1.5rem;
+}
+
+.btn:hover {
+    text-decoration: underline;
+}
+
+@media only screen and (min-width: 768px)  {
+    h1 { font-size: 2rem; }
+    .cell { font-size: 2rem; }
+}
