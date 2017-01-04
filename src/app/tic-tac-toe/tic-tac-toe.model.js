@@ -22,7 +22,7 @@ model.present = (data) => {
         if (isEmptyCell(model.board, data.position)) {
             model.board[data.position] = getComputerChecker(model.board);
         }        
-    } else if (model.state.winner(model) || model.state.loser(model) || model.state.draw(model)) {
+    } else if (model.state.winner(model) || model.state.loser(model) || model.state.tie(model)) {
         if (data.reseting) {
             model.board = createEmptyBoard();
             model.userChecker = null;

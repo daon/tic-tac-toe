@@ -1,5 +1,5 @@
 'use strict';
-import { BOARD_SIZE, CROSS, NOUGHT } from './board';
+import { BOARD_SIZE, CROSS, NOUGHT, getWinningPositions } from './board';
 
 export let view = {};
 
@@ -12,6 +12,7 @@ view.display = (representation) => {
 
 view.ready = (model) => {
     let representation = `
+        <p>What checker would you like to use?</p>
         <button type="button" class="btn" onclick="actions.setUserChecker({ userChecker: '${CROSS}' })">${CROSS}</button>
         <span>or</span>
         <button type="button" class="btn" onclick="actions.setUserChecker({ userChecker: '${NOUGHT}' })">${NOUGHT}</button>
@@ -21,7 +22,7 @@ view.ready = (model) => {
 }
 
 view.userPlaying = (model) => {
-    let representation = `<div class="player">Your turn!</div>`;
+    let representation = `<div class="label label-player">Your turn!</div>`;
     for (let i = 0; i < model.board.length; i++) {
         if (i % BOARD_SIZE === 0) {
             representation += '<div class="row">';
@@ -37,7 +38,7 @@ view.userPlaying = (model) => {
 };
 
 view.computerPlaying = (model) => {
-    let representation = `<div class="player">Computers turn!</div>`;
+    let representation = `<div class="label label-player">Computers turn!</div>`;
     for (let i = 0; i < model.board.length; i++) {
         if (i % BOARD_SIZE === 0) {
             representation += '<div class="row">';
@@ -53,18 +54,53 @@ view.computerPlaying = (model) => {
 };
 
 view.winner = (model) => {
-    let representation = `<div class="player">You won!!</div>`;
+    let winningPositions = getWinningPositions(model.board);
+    let representation = `<div class="label label-winner">You won!!</div>`;
+    for (let i = 0; i < model.board.length; i++) {
+        if (i % BOARD_SIZE === 0) {
+            representation += '<div class="row">';
+        }
+
+        let cellClasses = winningPositions.some(position => position === i) ? 'cell highlighted' : 'cell';
+        representation += `<div class="${cellClasses}">${model.board[i]}</div>`;
+        
+        if (i % BOARD_SIZE === (BOARD_SIZE - 1)) {
+            representation += '</div>';
+        }
+    }
     return representation;
     
 };
 
 view.loser = (model) => {
-    let representation = `<div class="player">Loser!!!</div>`;
+    let winningPositions = getWinningPositions(model.board);
+    let representation = `<div class="label label-loser">Loser!!!</div>`;
+    for (let i = 0; i < model.board.length; i++) {
+        if (i % BOARD_SIZE === 0) {
+            representation += '<div class="row">';
+        }
+        let cellClasses = winningPositions.some(position => position === i) ? 'cell highlighted' : 'cell';
+        representation += `<div class="${cellClasses}">${model.board[i]}</div>`;
+        
+        if (i % BOARD_SIZE === (BOARD_SIZE - 1)) {
+            representation += '</div>';
+        }
+    }
     return representation;
-    
 };
 
-view.draw = (model) => {
-    let representation = `<div class="player">It was a draw</div>`;
-    return representation;  
+view.tie = (model) => {
+    let representation = `<div class="label label-tie">It was a tie!</div>`;
+    for (let i = 0; i < model.board.length; i++) {
+        if (i % BOARD_SIZE === 0) {
+            representation += '<div class="row">';
+        }
+
+        representation += `<div class="cell">${model.board[i]}</div>`;
+        
+        if (i % BOARD_SIZE === (BOARD_SIZE - 1)) {
+            representation += '</div>';
+        }
+    }
+    return representation; 
 };

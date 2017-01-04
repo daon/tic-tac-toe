@@ -1,6 +1,7 @@
 'use strict';
 import { isFullBoard, getCurrentPlayer, getComputerChecker, isWinner, isLoser, CROSS, NOUGHT, USER, COMPUTER } from './board';
-import { getNextComputerMove } from './randomPositionComputer';
+// import { getNextComputerMove } from './randomPositionComputer';
+import { getNextComputerMove } from './preferedPositionComputer';
 import { actions } from './tic-tac-toe.actions';
 
 export let state = {};
@@ -39,7 +40,7 @@ state.loser = (model) => {
         isLoser(model.board, model.userChecker) === true;
 }
 
-state.draw = (model) => {
+state.tie = (model) => {
     return  isWinner(model.board, model.userChecker) === false && 
         isLoser(model.board, model.userChecker) === false && 
         isFullBoard(model.board) === true; 
@@ -73,9 +74,9 @@ state.representation = (model) => {
         representation = state.view.loser(model);
     }
 
-    if (state.draw(model)) {
-        console.log('state: draw');
-        representation = state.view.draw(model);
+    if (state.tie(model)) {
+        console.log('state: tie');
+        representation = state.view.tie(model);
     }
 
     state.view.display(representation);
@@ -86,7 +87,7 @@ state.nextAction = (model) => {
         actions.computerMove(getNextComputerMove(model.board), model.present);
     }
 
-    if (state.winner(model) || state.loser(model) || state.draw(model)) {
+    if (state.winner(model) || state.loser(model) || state.tie(model)) {
         actions.reset({}, model.present);
     }
 };

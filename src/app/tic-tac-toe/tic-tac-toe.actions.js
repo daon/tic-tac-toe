@@ -13,17 +13,17 @@ actions.setUserChecker = (data, present) => {
 };
 
 actions.userMove = (data, present) => {
-    console.log('action: userMove');
     present = present || actions.present;
     data = data || {};
+    console.log(`action: userMove ${data.position}`);
     present(data);
     return false;
 };
 
 actions.computerMove = (data, present) => {
-    console.log('action: computerMove');
     present = present || actions.present;
     data = data || {};
+    console.log(`action: computerMove ${data.position}`);
     let d = data;
     let p = present;
     setTimeout(() => {
