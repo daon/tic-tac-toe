@@ -1,7 +1,6 @@
+import { createCell, EMPTY, CROSS, NOUGHT } from './cell';  
+
 export const BOARD_SIZE = 3;
-export const EMPTY = '';
-export const CROSS = 'X';
-export const NOUGHT = 'O';
 export const USER = 0;
 export const COMPUTER = 1;
 export const WINNING_POSITIONS = [
@@ -15,42 +14,43 @@ export const WINNING_POSITIONS = [
     [2, 4, 6]
 ];
 
-export function createCell() {
-    let value = EMPTY;
-    let oldValue = EMPTY;
-    let highlighted = false;
-
-    return { 
-        getValue: () => value,
-        setValue: (newValue) => {
-            oldValue = value;
-            value = newValue;
-            return value;
-        },
-        isValue: (otherValue) => value === otherValue,
-        getOldValue: () => oldValue,
-        isHighlighted: () => highlighted,
-        toggleHighlight: () =>  highlighted = !highlighted
-     };
-}
-
-export function createBoard() {
-    let cells = new Array(BOARD_SIZE*BOARD_SIZE).fill(createCell());
-
-    return {
-        getCells: () => cells,
-        isEmpty: () => cells.each(cell => cell.isValue(EMPTY))
-    };
-}
 
 export function isCell(cell) {
     return cell !== null && typeof cell === 'object' && 
         cell.hasOwnProperty('getValue') && 
         cell.hasOwnProperty('setValue') && 
-        cell.hasOwnProperty('getOldValue') &&
-        cell.hasOwnProperty('isHighlighted') &&
-        cell.hasOwnProperty('toggleHighlight');
+        cell.hasOwnProperty('isActivated') &&
+        cell.hasOwnProperty('activate');
 }
+
+
+export function createBoard(cells) {
+    if (Array.isArray(cells) && cells.length === 9) {
+        cells = cells.map(cell => {
+            if(cell !== null && cell === 'object' && cell.hasOwnProperty('value')) {
+                let activated = !!cell.activated;
+                return createCell(cell.value, activated);
+            }
+            return createCell();
+        });
+    } else {
+        cells = new Array(9).fill(createCell());
+    }
+
+    return {
+        getCells: () => cells,
+        isEmpty: () => cells.every(cell => cell.getValue() === EMPTY),
+        setCellValue: (position, value) => {
+            let cell = cells[position];
+            if (!cell) {
+                return false;
+            }
+
+            return cells[position].setValue(value);
+        }
+    };
+}
+
 
 export function isEmptyCell(cell) { 
      return  isCell(cell) && cell.getValue() === EMPTY;
