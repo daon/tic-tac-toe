@@ -1,3 +1,5 @@
+/* Mobile first Styles */
+
 html, body {
     height: 100%;
     background: linear-gradient(90deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
@@ -94,7 +96,46 @@ h1 {
     text-decoration: underline;
 }
 
+/*
+    Animations from Animate.css, https://daneden.github.io/animate.css/
+    Author: Daniel Eden, https://daneden.me/
+*/
+@keyframes tada {
+  from {    
+    transform: scale3d(1, 1, 1);
+  }
+
+  10%, 20% {
+    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+  }
+
+  30%, 50%, 70%, 90% {
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+  }
+
+  40%, 60%, 80% {
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.tada {
+  animation-name: tada;
+}
+
+.animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+
+/* Large Displays */
+
 @media only screen and (min-width: 768px)  {
     h1 { font-size: 2rem; }
     .cell { font-size: 2rem; }
 }
+

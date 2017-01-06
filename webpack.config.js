@@ -1,6 +1,8 @@
 'use strict';
 
 let path = require('path');
+let webpack = require('webpack');
+let autoprefixer = require('autoprefixer');
 
 let HtmlPlugin = require('html-webpack-plugin');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -30,7 +32,7 @@ module.exports = (env) => {
                 exclude: /node_modules/,
                 loader: ExtractTextPlugin.extract({
                     fallbackLoader: 'style-loader',
-                    loader: 'css-loader'
+                    loader: ['css-loader', 'postcss-loader']
                 })
             },
             {
@@ -46,6 +48,7 @@ module.exports = (env) => {
     
     config.plugins = [
         new CleanPlugin([path.resolve(__dirname, 'build')]),
+        new webpack.LoaderOptionsPlugin({ options: { postcss: [ autoprefixer ] }}),
         new ExtractTextPlugin('[name].[hash].css'),
         new HtmlPlugin({
             template: path.resolve(__dirname, 'src/index.html'),

@@ -15,26 +15,61 @@ export const WINNING_POSITIONS = [
     [2, 4, 6]
 ];
 
-export function createEmptyBoard() {
-    return new Array(BOARD_SIZE*BOARD_SIZE).fill(EMPTY);
+export function createCell() {
+    let value = EMPTY;
+    let oldValue = EMPTY;
+    let highlighted = false;
+
+    return { 
+        getValue: () => value,
+        setValue: (newValue) => {
+            oldValue = value;
+            value = newValue;
+            return value;
+        },
+        isValue: (otherValue) => value === otherValue,
+        getOldValue: () => oldValue,
+        isHighlighted: () => highlighted,
+        toggleHighlight: () =>  highlighted = !highlighted
+     };
 }
 
-export function isEmptyCell(board, position) {
-     return board[position] === EMPTY;
+export function createBoard() {
+    let cells = new Array(BOARD_SIZE*BOARD_SIZE).fill(createCell());
+
+    return {
+        getCells: () => cells,
+        isEmpty: () => cells.each(cell => cell.isValue(EMPTY))
+    };
 }
 
-export function isCheckedCell(board, position) {
-    return board[position] === CROSS || board[position] === NOUGHT;
+export function isCell(cell) {
+    return cell !== null && typeof cell === 'object' && 
+        cell.hasOwnProperty('getValue') && 
+        cell.hasOwnProperty('setValue') && 
+        cell.hasOwnProperty('getOldValue') &&
+        cell.hasOwnProperty('isHighlighted') &&
+        cell.hasOwnProperty('toggleHighlight');
+}
+
+export function isEmptyCell(cell) { 
+     return  isCell(cell) && cell.getValue() === EMPTY;
+}
+
+export function isCheckedCell(cell) {
+    return isCell(cell) && (cell.getValue() === CROSS || cell.getValue() === NOUGHT);
 }
 
 export function countCheckers(board, checker) {
     return board
-        .filter(cell => cell === checker)
+        .filter(cell => {
+            return cell.value === checker; 
+        })
         .length;
 }
 
 export function isFullBoard(board) {
-    return board.every((checker, position) => isCheckedCell(board, position));
+    return board.every(cell => isCheckedCell(cell));
 }
 
 export function getCurrentPlayer(board) {
@@ -58,9 +93,9 @@ export function getComputerChecker(board) {
 export function getWinningPositions(board) {
     return WINNING_POSITIONS
         .filter(positions => {
-            return isCheckedCell(board, positions[0]) && 
-            board[positions[0]] === board[positions[1]] &&
-            board[positions[0]] === board[positions[2]];
+            return isCheckedCell(board[positions[0]]) && 
+            board[positions[0]].value === board[positions[1]].value &&
+            board[positions[0]].value === board[positions[2]].value;
         })
         .reduce((a, b) => a.concat(b), []);
 }
@@ -71,7 +106,7 @@ export function isWinner(board, checker) {
         return false;
     }
     
-    return board[winningPositions[0]] === checker;
+    return board[winningPositions[0]].value === checker;
 }
 
 export function isLoser(board, checker) {
@@ -80,5 +115,5 @@ export function isLoser(board, checker) {
         return false;
     }
     
-    return board[winningPositions[0]] !== checker;
+    return board[winningPositions[0]].value !== checker;
 }

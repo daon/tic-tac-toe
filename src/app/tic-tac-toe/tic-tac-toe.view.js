@@ -28,7 +28,9 @@ view.userPlaying = (model) => {
             representation += '<div class="row">';
         }
 
-        representation += `<div class="cell" onclick="actions.userMove({ position: ${i} })">${model.board[i]}</div>`;
+        representation += `<div class="cell" onclick="actions.userMove({ position: ${i} })">
+            <div class="animated tada">${model.board[i]}</div>
+        </div>`;
         
         if (i % BOARD_SIZE === (BOARD_SIZE - 1)) {
             representation += '</div>';
@@ -44,7 +46,9 @@ view.computerPlaying = (model) => {
             representation += '<div class="row">';
         }
 
-        representation += `<div class="cell">${model.board[i]}</div>`;
+        representation += `<div class="cell">
+            <div class="animated tada">${model.board[i]}</div>
+        </div>`;
         
         if (i % BOARD_SIZE === (BOARD_SIZE - 1)) {
             representation += '</div>';
