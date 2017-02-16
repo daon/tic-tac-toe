@@ -5,13 +5,39 @@
 2. My game will reset as soon as it's over so I can play again.
 3. I can choose whether I want to play as X or O.
 
-## Tasks
-- [x] Configure webpack 2.0 for dev and prod 
-- [x] Configure deployment to GitHub Pages
-- [x] Configure mocha for testing
-- [x] Implement first test
-- [x] Look into Minimax algorithm
-- [ ] Do TDD when implementing two player game
-- [ ] Understand Minimax 🤔
-- [ ] Break down implementation of AI into smaller tasks
-- [ ] Do TDD when implementing AI
+# Game Factory
+
+To create a game, call the createGame function
+without any arguments:
+
+```javascript
+import { createGame } from './gameFactory';
+
+const game = createGame();
+
+```
+
+The game factory also take an argument of a board
+state. The board state is represented by an array
+of nine values of different cell states. A cell can
+have three different states:
+
+1. Empty
+2. Cross
+3. Nought
+
+Here is an example of how to set the board state of
+a game:
+
+```javascript
+import { gameFactory, EMPTY, CROSS, NOUGHT } from './gameFactory';
+
+const board = [
+    EMPTY, CROSS, EMPTY,
+    NOUGHT, NOUGHT, EMPTY,
+    EMPTY, EMPTY, CROSS
+];
+
+var game = createGame(board);
+
+```
