@@ -1,7 +1,6 @@
 
 # Tic Tac Toe
 [![Build Status](https://travis-ci.org/daon/tic-tac-toe.svg?branch=master)](https://travis-ci.org/daon/tic-tac-toe)
-[![Stories in Progress](https://badge.waffle.io/daon/tic-tac-toe.png?label=in%20progress&title=In%20Progress)](https://waffle.io/daon/tic-tac-toe)
 
 ## User Stories
 1. I can play a game of Tic Tac Toe with the computer.
