@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/daon/tic-tac-toe.png?label=ready&title=Ready)](https://waffle.io/daon/tic-tac-toe)
 # Tic Tac Toe
 [![Build Status](https://travis-ci.org/daon/tic-tac-toe.svg?branch=master)](https://travis-ci.org/daon/tic-tac-toe)
 
