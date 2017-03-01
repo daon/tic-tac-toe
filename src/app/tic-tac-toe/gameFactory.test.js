@@ -1,5 +1,5 @@
 import test from 'tape';
-import { createGame, EMPTY, CROSS, NOUGHT } from './gameFactory';
+import { createGame, EMPTY, CROSS, NOUGHT, BOARD_LENGTH } from './gameFactory';
 
 test('createGame function input type', assert => {
     const inputs = [
@@ -110,6 +110,66 @@ test('createGame function output type', assert => {
 
     assert.equal(actual, expected,
         'createGame() should return an object');
+
+    assert.end();
+});
+
+test('createGame function output', assert => {
+    const game = createGame();
+
+    assert.ok(game.hasOwnProperty('getBoard'),
+        'createGame() output should have a property named "getBoard"');
+
+    assert.end();
+});
+
+test('getBoard property type', assert => {
+    const game = createGame();
+    const actual = typeof game.getBoard;
+    const expected = 'function';
+
+    assert.equal(actual, expected,
+        'getBoard type should be a function')
+
+    assert.end();
+});
+
+test('getBoard property output type', assert => {
+    const game = createGame();
+
+    assert.ok(Array.isArray(game.getBoard()),
+        'getBoard output type should be an array')
+
+    assert.end();
+});
+
+test('getBoard property output array length', assert => {
+    const game = createGame();
+    const actual = game.getBoard().length;
+    const expected = BOARD_LENGTH;
+
+    assert.deepEqual(actual, expected,
+        `getBoard output array length should be ${BOARD_LENGTH}`);
+
+    assert.end();
+});
+
+test('getBoard property output array', assert => {
+    const game = createGame();
+    const actual = game.getBoard();
+    const expected = [
+        EMPTY, EMPTY, EMPTY,
+        EMPTY, EMPTY, EMPTY,
+        EMPTY, EMPTY, EMPTY
+    ];
+
+    assert.deepEqual(actual, expected,
+        'getBoard output array should be an board');
+
+    actual[1] = CROSS;
+
+    assert.notDeepEqual(actual, expected,
+        'getBoard output should not change game board');
 
     assert.end();
 });

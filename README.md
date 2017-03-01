@@ -30,7 +30,7 @@ Here is an example of how to set the board state of
 a game:
 
 ```javascript
-import { gameFactory, EMPTY, CROSS, NOUGHT } from './gameFactory';
+import { createGame, EMPTY, CROSS, NOUGHT } from './gameFactory';
 
 const board = [
     EMPTY, CROSS, EMPTY,
@@ -38,6 +38,29 @@ const board = [
     EMPTY, EMPTY, CROSS
 ];
 
-var game = createGame(board);
+const game = createGame(board);
 
+```
+
+# Game Object
+
+The game object has the following methods:
+
+- getBoard - Returns the board state for the game
+
+## getBoard Example
+
+```javascript
+import { createGame, EMPTY, CROSS, NOUGHT } from './gameFactory';
+
+const board = [
+    EMPTY, CROSS, EMPTY,
+    NOUGHT, NOUGHT, EMPTY,
+    EMPTY, EMPTY, CROSS
+];
+
+const game = createGame(board);
+const board = game.getBoard();
+console.log(board);
+// -> [0, 1, 0, 2, 2, 0, 0, 0, 1]
 ```

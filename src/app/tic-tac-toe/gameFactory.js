@@ -1,4 +1,4 @@
-const BOARD_LENGTH = 9;
+export const BOARD_LENGTH = 9;
 export const EMPTY = 0;
 export const CROSS = 1;
 export const NOUGHT = 2;
@@ -46,5 +46,7 @@ export function createGame(board) {
         throw new Error(`Invalid number of nought count`);
     }
 
-    return {};
+    return {
+        getBoard: () => board
+    };
 }
