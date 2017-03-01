@@ -20,6 +20,7 @@ export function createGame(board) {
 
     let crossCount = 0;
     let noughtCount = 0;
+    let availableMoves = [];
     board.forEach((value, position) => {
         if (typeof value !== 'number' || isNaN(value)) {
             throw new Error(`Invalid board value type: ${typeof value} at position: ${position}`)
@@ -36,6 +37,10 @@ export function createGame(board) {
         if (value === NOUGHT) {
             noughtCount++;
         }
+
+        if (value === EMPTY) {
+            availableMoves.push(position);
+        }
     });
 
     if ((crossCount - noughtCount) > 1) {
@@ -47,6 +52,7 @@ export function createGame(board) {
     }
 
     return {
-        getBoard: () => board
+        getBoard: () => board,
+        getAvailableMoves: () => availableMoves
     };
 }

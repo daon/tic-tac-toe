@@ -48,9 +48,10 @@ const game = createGame(board);
 
 The game object has the following methods:
 
-- getBoard - Returns the board state for the game
+- `getBoard()` - Returns the board state for the game
+- `getAvailableMoves()` - Returns empty board position for the game
 
-## getBoard Example
+## Example: `getBoard()`
 
 ```javascript
 import { createGame, EMPTY, CROSS, NOUGHT } from './gameFactory';
@@ -63,6 +64,25 @@ const board = [
 
 const game = createGame(board);
 const board = game.getBoard();
+
 console.log(board);
 // -> [0, 1, 0, 2, 2, 0, 0, 0, 1]
+```
+
+## Example: `getAvailableMoves()`
+
+```javascript
+import { createGame, EMPTY, CROSS, NOUGHT } from './gameFactory';
+
+const board = [
+    EMPTY, CROSS, EMPTY,
+    NOUGHT, NOUGHT, EMPTY,
+    EMPTY, EMPTY, CROSS
+];
+
+const game = createGame(board);
+const availableMoves = game.getAvailableMoves();
+
+console.log(availableMoves);
+// -> [0, 2, 5, 6, 7]
 ```

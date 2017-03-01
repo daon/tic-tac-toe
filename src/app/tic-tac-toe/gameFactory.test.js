@@ -120,6 +120,9 @@ test('createGame function output', assert => {
     assert.ok(game.hasOwnProperty('getBoard'),
         'createGame() output should have a property named "getBoard"');
 
+    assert.ok(game.hasOwnProperty('getAvailableMoves'),
+        'createGame() output should have a property named "getAvailableMoves"');
+
     assert.end();
 });
 
@@ -169,7 +172,49 @@ test('getBoard property output array', assert => {
     actual[1] = CROSS;
 
     assert.notDeepEqual(actual, expected,
-        'getBoard output should not change game board');
+        'getBoard output array should not change game board state');
+
+    assert.end();
+});
+
+test('getAvailableMoves property type', assert => {
+    const game = createGame();
+    const actual = typeof game.getAvailableMoves;
+    const expected = 'function';
+
+    assert.equal(actual, expected,
+        'getAvailableMoves type should be a function')
+
+    assert.end();
+});
+
+
+test('getAvailableMoves property output type', assert => {
+    const game = createGame();
+
+    assert.ok(Array.isArray(game.getAvailableMoves()),
+        'getAvailableMoves output type should be an array')
+
+    assert.end();
+});
+
+test('getAvailableMoves property output array', assert => {
+    const input = [
+        CROSS, EMPTY, NOUGHT,
+        NOUGHT, EMPTY, CROSS,
+        EMPTY, EMPTY, EMPTY
+    ];
+    const game = createGame(input);
+    const actual = game.getAvailableMoves();
+    const expected = [1, 4, 6, 7, 8];
+
+    assert.deepEqual(actual, expected,
+        `getAvailableMoves output array should be empty cell positions`);
+
+    actual[0] = 2;
+
+    assert.notDeepEqual(actual, expected,
+        'getAvailableMoves output array should not change game board state');
 
     assert.end();
 });
