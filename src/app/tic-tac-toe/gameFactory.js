@@ -3,9 +3,13 @@ export const EMPTY = 0;
 export const CROSS = 1;
 export const NOUGHT = 2;
 
-export function createGame(board) {
+export function createGame(board, activeTurn) {
     if (typeof board !== 'undefined' && !Array.isArray(board)) {
         throw new Error(`Invalid board type: ${typeof board}`);
+    }
+
+    if (typeof activeTurn !== 'undefined' && typeof activeTurn !== 'number' || (typeof activeTurn === 'number' && isNaN(activeTurn))) {
+        throw new Error(`Invalid activeTurn type: ${typeof activeTurn}`);
     }
 
     board = board || [
@@ -51,8 +55,19 @@ export function createGame(board) {
         throw new Error(`Invalid number of nought count`);
     }
 
+
+    activeTurn = activeTurn || CROSS;
+    if (crossCount > noughtCount) {
+        activeTurn = NOUGHT;
+    }
+    if (noughtCount > crossCount) {
+        activeTurn = CROSS;
+    }
+
+
     return {
         getBoard: () => board,
-        getAvailableMoves: () => availableMoves
+        getAvailableMoves: () => availableMoves,
+        getActiveTurn: () => activeTurn
     };
 }

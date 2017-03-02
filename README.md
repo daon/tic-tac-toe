@@ -22,11 +22,11 @@ const game = createGame();
 The game factory also take an argument of a board
 state. The board state is represented by an array
 of nine values of different cell states. A cell can
-have three different states:
+have three different states (state value in parentheses):
 
-1. Empty
-2. Cross
-3. Nought
+1. Empty    `(0)`
+2. Cross    `(1)`
+3. Nought   `(2)`
 
 Here is an example of how to set the board state of
 a game:
@@ -49,7 +49,8 @@ const game = createGame(board);
 The game object has the following methods:
 
 - `getBoard()` - Returns the board state for the game
-- `getAvailableMoves()` - Returns empty board position for the game
+- `getAvailableMoves()` - Returns empty board positions for the game
+- `getActiveTurn()` - Returns current player turn, cross or nought
 
 ## Example: `getBoard()`
 
@@ -85,4 +86,21 @@ const availableMoves = game.getAvailableMoves();
 
 console.log(availableMoves);
 // -> [0, 2, 5, 6, 7]
+```
+## Example: `getActiveTurn()`
+
+```javascript
+import { createGame, EMPTY, CROSS, NOUGHT } from './gameFactory';
+
+const board = [
+    EMPTY, CROSS, EMPTY,
+    NOUGHT, NOUGHT, CROSS,
+    EMPTY, EMPTY, CROSS
+];
+
+const game = createGame(board);
+const activeTurn = game.getActiveTurn();
+
+console.log(activeTurn);
+// -> 2
 ```
