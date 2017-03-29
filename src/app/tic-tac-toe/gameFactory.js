@@ -55,7 +55,6 @@ export function createGame(board, activeTurn) {
         throw new Error(`Invalid number of nought count`);
     }
 
-
     activeTurn = activeTurn || CROSS;
     if (crossCount > noughtCount) {
         activeTurn = NOUGHT;
@@ -64,10 +63,40 @@ export function createGame(board, activeTurn) {
         activeTurn = CROSS;
     }
 
+    const threeInRow = (player) => {
+        return (board[0] === player && board[1] === player && board[2] == player) ||
+            (board[3] === player && board[4] === player && board[5] === player) ||
+            (board[6] === player && board[7] === player && board[8] === player);
+    }
+
+    const threeInCol = (player) => {
+        return (board[0] === player && board[3] === player && board[6] === player) ||
+            (board[1] === player && board[4] === player && board[7] === player) ||
+            (board[2] === player && board[5] === player && board[8] === player);
+    }
+
+    const threeInDig = (player) => {
+        return (board[0] === player && board[4] === player && board[8] === player) ||
+            (board[2] === player && board[4] === player && board[6] === player);
+    }
+
+    let winner = 0;
+    if (threeInRow(CROSS) || threeInCol(CROSS) || threeInDig(CROSS)) {
+        winner = CROSS;
+    } else if (threeInRow(NOUGHT) || threeInCol(NOUGHT) || threeInDig(NOUGHT)) {
+        winner = NOUGHT;
+    }
 
     return {
         getBoard: () => board,
         getAvailableMoves: () => availableMoves,
-        getActiveTurn: () => activeTurn
+        getActiveTurn: () => activeTurn,
+        isWinner: (player) => {
+            if (typeof player !== 'undefined' && typeof player !== 'number' || (typeof player === 'number' && isNaN(player))) {
+                throw new Error(`Invalid player type: ${typeof player}`);
+            }
+
+            return player === winner;
+        }
     };
 }

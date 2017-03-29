@@ -51,6 +51,7 @@ The game object has the following methods:
 - `getBoard()` - Returns the board state for the game
 - `getAvailableMoves()` - Returns empty board positions for the game
 - `getActiveTurn()` - Returns current player turn, cross or nought
+- `isWinner(player)` - Returns true if the argument `player` (CROSS or NOUGHT) is the winner else it returns false
 
 ## Example: `getBoard()`
 
@@ -103,4 +104,22 @@ const activeTurn = game.getActiveTurn();
 
 console.log(activeTurn);
 // -> 2
+```
+
+## Example: `isWinner(player)`
+
+```javascript
+import { createGame, EMPTY, CROSS, NOUGHT } from './gameFactory';
+
+const board = [
+    EMPTY, EMPTY, CROSS,
+    NOUGHT, NOUGHT, CROSS,
+    EMPTY, EMPTY, CROSS
+];
+
+const game = createGame(board);
+const isCrossWinner = game.isWinner(CROSS);
+
+console.log(isCrossWinner);
+// -> true
 ```
