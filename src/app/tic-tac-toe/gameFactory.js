@@ -1,7 +1,7 @@
 export const BOARD_LENGTH = 9;
-export const EMPTY = 0;
-export const CROSS = 1;
-export const NOUGHT = 2;
+export const _ = 0;
+export const X = 1;
+export const O = 2;
 
 export function createGame(board, activeTurn) {
     if (typeof board !== 'undefined' && !Array.isArray(board)) {
@@ -13,9 +13,9 @@ export function createGame(board, activeTurn) {
     }
 
     board = board || [
-        EMPTY, EMPTY, EMPTY,
-        EMPTY, EMPTY, EMPTY,
-        EMPTY, EMPTY, EMPTY
+        _, _, _,
+        _, _, _,
+        _, _, _
     ];
 
     if (board.length < BOARD_LENGTH || board.length > BOARD_LENGTH) {
@@ -30,37 +30,37 @@ export function createGame(board, activeTurn) {
             throw new Error(`Invalid board value type: ${typeof value} at position: ${position}`)
         }
 
-        if (value !== EMPTY && value !== CROSS && value !== NOUGHT) {
+        if (value !== _ && value !== X && value !== O) {
             throw new Error(`Invalid board value: ${value}`);
         }
 
-        if (value === CROSS) {
+        if (value === X) {
             crossCount++;
         }
 
-        if (value === NOUGHT) {
+        if (value === O) {
             noughtCount++;
         }
 
-        if (value === EMPTY) {
+        if (value === _) {
             availableMoves.push(position);
         }
     });
 
     if ((crossCount - noughtCount) > 1) {
-        throw new Error(`Invalid number of cross count`);
+        throw new Error(`Invalid number of X count`);
     }
 
     if ((noughtCount - crossCount) > 1) {
-        throw new Error(`Invalid number of nought count`);
+        throw new Error(`Invalid number of O count`);
     }
 
-    activeTurn = activeTurn || CROSS;
+    activeTurn = activeTurn || X;
     if (crossCount > noughtCount) {
-        activeTurn = NOUGHT;
+        activeTurn = O;
     }
     if (noughtCount > crossCount) {
-        activeTurn = CROSS;
+        activeTurn = X;
     }
 
     const threeInRow = (player) => {
@@ -81,10 +81,10 @@ export function createGame(board, activeTurn) {
     }
 
     let winner = 0;
-    if (threeInRow(CROSS) || threeInCol(CROSS) || threeInDig(CROSS)) {
-        winner = CROSS;
-    } else if (threeInRow(NOUGHT) || threeInCol(NOUGHT) || threeInDig(NOUGHT)) {
-        winner = NOUGHT;
+    if (threeInRow(X) || threeInCol(X) || threeInDig(X)) {
+        winner = X;
+    } else if (threeInRow(O) || threeInCol(O) || threeInDig(O)) {
+        winner = O;
     }
 
     return {

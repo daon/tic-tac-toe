@@ -24,20 +24,20 @@ state. The board state is represented by an array
 of nine values of different cell states. A cell can
 have three different states (state value in parentheses):
 
-1. Empty    `(0)`
-2. Cross    `(1)`
-3. Nought   `(2)`
+1. _    `(0)` - _
+2. X    `(1)` - X
+3. O    `(2)` - O
 
 Here is an example of how to set the board state of
 a game:
 
 ```javascript
-import { createGame, EMPTY, CROSS, NOUGHT } from './gameFactory';
+import { createGame, _, X, O } from './gameFactory';
 
 const board = [
-    EMPTY, CROSS, EMPTY,
-    NOUGHT, NOUGHT, EMPTY,
-    EMPTY, EMPTY, CROSS
+    _, X, _,
+    O, O, _,
+    _, _, X
 ];
 
 const game = createGame(board);
@@ -49,19 +49,19 @@ const game = createGame(board);
 The game object has the following methods:
 
 - `getBoard()` - Returns the board state for the game
-- `getAvailableMoves()` - Returns empty board positions for the game
-- `getActiveTurn()` - Returns current player turn, cross or nought
-- `isWinner(player)` - Returns true if the argument `player` (CROSS or NOUGHT) is the winner else it returns false
+- `getAvailableMoves()` - Returns empty (_) board positions for the game
+- `getActiveTurn()` - Returns current player turn, X or O
+- `isWinner(player)` - Returns true if the argument `player` (X or O) is the winner else it returns false
 
 ## Example: `getBoard()`
 
 ```javascript
-import { createGame, EMPTY, CROSS, NOUGHT } from './gameFactory';
+import { createGame, _, X, O } from './gameFactory';
 
 const board = [
-    EMPTY, CROSS, EMPTY,
-    NOUGHT, NOUGHT, EMPTY,
-    EMPTY, EMPTY, CROSS
+    _, X, _,
+    O, O, _,
+    _, _, X
 ];
 
 const game = createGame(board);
@@ -74,12 +74,12 @@ console.log(board);
 ## Example: `getAvailableMoves()`
 
 ```javascript
-import { createGame, EMPTY, CROSS, NOUGHT } from './gameFactory';
+import { createGame, _, X, O } from './gameFactory';
 
 const board = [
-    EMPTY, CROSS, EMPTY,
-    NOUGHT, NOUGHT, EMPTY,
-    EMPTY, EMPTY, CROSS
+    _, X, _,
+    O, O, _,
+    _, _, X
 ];
 
 const game = createGame(board);
@@ -91,12 +91,12 @@ console.log(availableMoves);
 ## Example: `getActiveTurn()`
 
 ```javascript
-import { createGame, EMPTY, CROSS, NOUGHT } from './gameFactory';
+import { createGame, _, X, O } from './gameFactory';
 
 const board = [
-    EMPTY, CROSS, EMPTY,
-    NOUGHT, NOUGHT, CROSS,
-    EMPTY, EMPTY, CROSS
+    _, X, _,
+    O, O, X,
+    _, _, X
 ];
 
 const game = createGame(board);
@@ -109,17 +109,17 @@ console.log(activeTurn);
 ## Example: `isWinner(player)`
 
 ```javascript
-import { createGame, EMPTY, CROSS, NOUGHT } from './gameFactory';
+import { createGame, _, X, O } from './gameFactory';
 
 const board = [
-    EMPTY, EMPTY, CROSS,
-    NOUGHT, NOUGHT, CROSS,
-    EMPTY, EMPTY, CROSS
+    _, _, X,
+    O, O, X,
+    _, _, X
 ];
 
 const game = createGame(board);
-const isCrossWinner = game.isWinner(CROSS);
+const isXWinner = game.isWinner(X);
 
-console.log(isCrossWinner);
+console.log(isXWinner);
 // -> true
 ```

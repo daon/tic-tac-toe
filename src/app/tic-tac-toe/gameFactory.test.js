@@ -1,5 +1,5 @@
 import test from 'tape';
-import { createGame, EMPTY, CROSS, NOUGHT, BOARD_LENGTH } from './gameFactory';
+import { createGame, _, X, O, BOARD_LENGTH } from './gameFactory';
 
 test()
 
@@ -55,9 +55,9 @@ test('createGame function input board min length', assert => {
 
 test('createGame function input board max length', assert => {
     const board = [
-        EMPTY, EMPTY, EMPTY,
-        EMPTY, EMPTY, EMPTY,
-        EMPTY, EMPTY, EMPTY, EMPTY
+        _, _, _,
+        _, _, _,
+        _, _, _, _
     ];
 
     const actual = () => createGame(board);
@@ -73,9 +73,9 @@ test('createGame function input board element type', assert => {
 
     elements.forEach(element => {
         const board = [
-            element, EMPTY, EMPTY,
-            EMPTY, EMPTY, EMPTY,
-            EMPTY, EMPTY, EMPTY
+            element, _, _,
+            _, _, _,
+            _, _, _
         ];
         const actual = () => createGame(board);
         const expected = new RegExp(`Invalid board value type: ${typeof element} at position: 0`);
@@ -88,9 +88,9 @@ test('createGame function input board element type', assert => {
 test('createGame function input board element', assert => {
     const element = 3;
     const board = [
-        element, EMPTY, EMPTY,
-        EMPTY, EMPTY, EMPTY,
-        EMPTY, EMPTY, EMPTY
+        element, _, _,
+        _, _, _,
+        _, _, _
     ];
 
     const actual = () => createGame(board);
@@ -100,29 +100,29 @@ test('createGame function input board element', assert => {
     assert.end();
 });
 
-test('createGame function input board cross count', assert => {
+test('createGame function input board X count', assert => {
     const board = [
-        CROSS, CROSS, EMPTY,
-        EMPTY, EMPTY, EMPTY,
-        EMPTY, EMPTY, EMPTY
+        X, X, _,
+        _, _, _,
+        _, _, _
     ];
 
     const actual = () => createGame(board);
-    const expected = new RegExp(`Invalid number of cross count`);
+    const expected = new RegExp(`Invalid number of X count`);
     assert.throws(actual, expected);
 
     assert.end();
 });
 
-test('createGame function input board nought count', assert => {
+test('createGame function input board O count', assert => {
     const board = [
-        CROSS, EMPTY, NOUGHT,
-        NOUGHT, EMPTY, NOUGHT,
-        EMPTY, EMPTY, EMPTY
+        X, _, O,
+        O, _, O,
+        _, _, _
     ];
 
     const actual = () => createGame(board);
-    const expected = new RegExp(`Invalid number of nought count`);
+    const expected = new RegExp(`Invalid number of O count`);
     assert.throws(actual, expected);
 
     assert.end();
@@ -192,15 +192,15 @@ test('getBoard property output array', assert => {
     const game = createGame();
     const actual = game.getBoard();
     const expected = [
-        EMPTY, EMPTY, EMPTY,
-        EMPTY, EMPTY, EMPTY,
-        EMPTY, EMPTY, EMPTY
+        _, _, _,
+        _, _, _,
+        _, _, _
     ];
 
     assert.deepEqual(actual, expected,
         'getBoard output array should be an board');
 
-    actual[1] = CROSS;
+    actual[1] = X;
 
     assert.notDeepEqual(actual, expected,
         'getBoard output array should not change game board state');
@@ -231,16 +231,16 @@ test('getAvailableMoves property output type', assert => {
 
 test('getAvailableMoves property output array', assert => {
     const board = [
-        CROSS, EMPTY, NOUGHT,
-        NOUGHT, EMPTY, CROSS,
-        EMPTY, EMPTY, EMPTY
+        X, _, O,
+        O, _, X,
+        _, _, _
     ];
     const game = createGame(board);
     const actual = game.getAvailableMoves();
     const expected = [1, 4, 6, 7, 8];
 
     assert.deepEqual(actual, expected,
-        `getAvailableMoves output array should be empty cell positions`);
+        `getAvailableMoves output array should be _ cell positions`);
 
     actual[0] = 2;
 
@@ -275,59 +275,59 @@ test('getActiveTurn property output type', assert => {
 
 test('getActiveTurn property output', assert => {
     let board = [
-        CROSS, EMPTY, NOUGHT,
-        NOUGHT, EMPTY, EMPTY,
-        EMPTY, EMPTY, EMPTY
+        X, _, O,
+        O, _, _,
+        _, _, _
     ];
     let game = createGame(board);
 
     let actual = game.getActiveTurn();
-    let expected = CROSS;
+    let expected = X;
 
     assert.equal(actual, expected,
-        `getActiveTurn output should be ${CROSS} when nought count is greater then cross count`);
+        `getActiveTurn output should be ${X} when O count is greater then X count`);
 
     board = [
-        CROSS, EMPTY, NOUGHT,
-        CROSS, EMPTY, EMPTY,
-        EMPTY, EMPTY, EMPTY
+        X, _, O,
+        X, _, _,
+        _, _, _
     ];
     game = createGame(board);
 
     actual = game.getActiveTurn();
-    expected = NOUGHT;
+    expected = O;
 
     assert.equal(actual, expected,
-        `getActiveTurn output should be ${NOUGHT} when cross count is greater then nought count`);
+        `getActiveTurn output should be ${O} when X count is greater then O count`);
 
     game = createGame();
 
     actual = game.getActiveTurn();
-    expected = CROSS;
+    expected = X;
 
     assert.equal(actual, expected,
-        `getActiveTurn output should be ${CROSS} when cross count is equal to nought count`);
+        `getActiveTurn output should be ${X} when X count is equal to O count`);
 
-    game = createGame(undefined, NOUGHT);
+    game = createGame(undefined, O);
 
     actual = game.getActiveTurn();
-    expected = NOUGHT;
+    expected = O;
 
     assert.equal(actual, expected,
-        `getActiveTurn output should be ${NOUGHT} when cross count is equal to nought count`);
+        `getActiveTurn output should be ${O} when X count is equal to O count`);
 
     board = [
-        CROSS, EMPTY, NOUGHT,
-        NOUGHT, EMPTY, EMPTY,
-        EMPTY, EMPTY, EMPTY
+        X, _, O,
+        O, _, _,
+        _, _, _
     ];
-    game = createGame(board, NOUGHT);
+    game = createGame(board, O);
 
     actual = game.getActiveTurn();
-    expected = CROSS;
+    expected = X;
 
     assert.equal(actual, expected,
-        `getActiveTurn output should be ${CROSS} when nought count is greater then cross count`);
+        `getActiveTurn output should be ${X} when O count is greater then X count`);
 
     assert.end();
 });
@@ -369,7 +369,7 @@ test('isWinner property input player type', assert => {
 test('isWinner property output type', assert => {
     const game = createGame();
 
-    const actual = typeof game.isWinner(CROSS);
+    const actual = typeof game.isWinner(X);
     const expected = 'boolean';
 
     assert.equal(actual, expected,
@@ -380,175 +380,175 @@ test('isWinner property output type', assert => {
 
 test('isWinner property output', assert => {
     let board = [
-        EMPTY, EMPTY, EMPTY,
-        EMPTY, EMPTY, EMPTY,
-        EMPTY, EMPTY, EMPTY
+        _, _, _,
+        _, _, _,
+        _, _, _
     ];
     let game = createGame(board);
 
-    let actual = game.isWinner(CROSS);
+    let actual = game.isWinner(X);
     let expected = false;
 
     assert.equal(actual, expected,
-        `isWinner(${CROSS}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
+        `isWinner(${X}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
-    actual = game.isWinner(NOUGHT);
+    actual = game.isWinner(O);
     expected = false;
 
     assert.equal(actual, expected,
-        `isWinner(${NOUGHT}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
+        `isWinner(${O}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
     board = [
-        CROSS, CROSS, CROSS,
-        NOUGHT, NOUGHT, EMPTY,
-        EMPTY, EMPTY, EMPTY
+        X, X, X,
+        O, O, _,
+        _, _, _
     ];
     game = createGame(board);
 
-    actual = game.isWinner(CROSS);
+    actual = game.isWinner(X);
     expected = true;
 
     assert.equal(actual, expected,
-        `isWinner(${CROSS}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
+        `isWinner(${X}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
-    actual = game.isWinner(NOUGHT);
+    actual = game.isWinner(O);
     expected = false;
 
     assert.equal(actual, expected,
-        `isWinner(${NOUGHT}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
+        `isWinner(${O}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
     board = [
-        NOUGHT, EMPTY, NOUGHT,
-        CROSS, CROSS, CROSS,
-        EMPTY, EMPTY, EMPTY
+        O, _, O,
+        X, X, X,
+        _, _, _
     ];
     game = createGame(board);
 
-    actual = game.isWinner(CROSS);
+    actual = game.isWinner(X);
     expected = true;
 
     assert.equal(actual, expected,
-        `isWinner(${CROSS}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
+        `isWinner(${X}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
-    actual = game.isWinner(NOUGHT);
+    actual = game.isWinner(O);
     expected = false;
 
     assert.equal(actual, expected,
-        `isWinner(${NOUGHT}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
+        `isWinner(${O}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
     board = [
-        NOUGHT, EMPTY, NOUGHT,
-        EMPTY, EMPTY, EMPTY,
-        CROSS, CROSS, CROSS
+        O, _, O,
+        _, _, _,
+        X, X, X
     ];
     game = createGame(board);
 
-    actual = game.isWinner(CROSS);
+    actual = game.isWinner(X);
     expected = true;
 
     assert.equal(actual, expected,
-        `isWinner(${CROSS}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
+        `isWinner(${X}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
-    actual = game.isWinner(NOUGHT);
+    actual = game.isWinner(O);
     expected = false;
 
     assert.equal(actual, expected,
-        `isWinner(${NOUGHT}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
+        `isWinner(${O}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
     board = [
-        CROSS, NOUGHT, EMPTY,
-        CROSS, NOUGHT, EMPTY,
-        CROSS, EMPTY, EMPTY
+        X, O, _,
+        X, O, _,
+        X, _, _
     ];
     game = createGame(board);
 
-    actual = game.isWinner(CROSS);
+    actual = game.isWinner(X);
     expected = true;
 
     assert.equal(actual, expected,
-        `isWinner(${CROSS}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
+        `isWinner(${X}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
-    actual = game.isWinner(NOUGHT);
+    actual = game.isWinner(O);
     expected = false;
 
     assert.equal(actual, expected,
-        `isWinner(${NOUGHT}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
+        `isWinner(${O}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
     board = [
-        NOUGHT, CROSS, NOUGHT,
-        EMPTY, CROSS, EMPTY,
-        EMPTY, CROSS, EMPTY
+        O, X, O,
+        _, X, _,
+        _, X, _
     ];
     game = createGame(board);
 
-    actual = game.isWinner(CROSS);
+    actual = game.isWinner(X);
     expected = true;
 
     assert.equal(actual, expected,
-        `isWinner(${CROSS}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
+        `isWinner(${X}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
-    actual = game.isWinner(NOUGHT);
+    actual = game.isWinner(O);
     expected = false;
 
     assert.equal(actual, expected,
-        `isWinner(${NOUGHT}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
+        `isWinner(${O}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
     board = [
-        NOUGHT, EMPTY, CROSS,
-        EMPTY, EMPTY, CROSS,
-        NOUGHT, EMPTY, CROSS
+        O, _, X,
+        _, _, X,
+        O, _, X
     ];
     game = createGame(board);
 
-    actual = game.isWinner(CROSS);
+    actual = game.isWinner(X);
     expected = true;
 
     assert.equal(actual, expected,
-        `isWinner(${CROSS}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
+        `isWinner(${X}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
-    actual = game.isWinner(NOUGHT);
+    actual = game.isWinner(O);
     expected = false;
 
     assert.equal(actual, expected,
-        `isWinner(${NOUGHT}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
+        `isWinner(${O}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
     board = [
-        CROSS, EMPTY, NOUGHT,
-        EMPTY, CROSS, EMPTY,
-        NOUGHT, EMPTY, CROSS
+        X, _, O,
+        _, X, _,
+        O, _, X
     ];
     game = createGame(board);
 
-    actual = game.isWinner(CROSS);
+    actual = game.isWinner(X);
     expected = true;
 
     assert.equal(actual, expected,
-        `isWinner(${CROSS}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
+        `isWinner(${X}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
-    actual = game.isWinner(NOUGHT);
+    actual = game.isWinner(O);
     expected = false;
 
     assert.equal(actual, expected,
-        `isWinner(${NOUGHT}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
+        `isWinner(${O}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
     board = [
-        NOUGHT, NOUGHT, CROSS,
-        EMPTY, CROSS, EMPTY,
-        CROSS, EMPTY, EMPTY
+        O, O, X,
+        _, X, _,
+        X, _, _
     ];
     game = createGame(board);
 
-    actual = game.isWinner(CROSS);
+    actual = game.isWinner(X);
     expected = true;
 
     assert.equal(actual, expected,
-        `isWinner(${CROSS}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
+        `isWinner(${X}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
-    actual = game.isWinner(NOUGHT);
+    actual = game.isWinner(O);
     expected = false;
 
     assert.equal(actual, expected,
-        `isWinner(${NOUGHT}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
+        `isWinner(${O}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
 
     assert.end();
