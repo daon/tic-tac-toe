@@ -24,9 +24,9 @@ state. The board state is represented by an array
 of nine values of different cell states. A cell can
 have three different states (state value in parentheses):
 
-1. _    `(0)` - _
-2. X    `(1)` - X
-3. O    `(2)` - O
+1. _    `(0)` - Empty
+2. X    `(1)` - Cross
+3. O    `(2)` - Nought
 
 Here is an example of how to set the board state of
 a game:
