@@ -160,3 +160,74 @@ console.log(newGameState.isWinner(O));
 // -> false
 // -> true
 ```
+
+# Score
+
+To score a game, call the score function
+on a game object:
+```javascript
+
+import { createGame } from './gameFactory';
+import { score } from './score';
+
+const game = createGame();
+const gameScore = score(game);
+
+```
+
+The score return 0, 10 or -10 depending on who is the winner of
+the game.
+
+## Example: There no winner
+```javascript
+
+import { createGame } from './gameFactory';
+import { score } from './score';
+
+const game = createGame();
+const gameScore = score(game);
+
+console.log(gameScore);
+// -> 0
+
+```
+
+## Example: X is the winner
+```javascript
+
+import { createGame } from './gameFactory';
+import { score } from './score';
+
+const board = [
+    _, X, O,
+    O, X, _
+    _, X, _
+];
+
+const game = createGame(board);
+const gameScore = score(game);
+
+console.log(gameScore);
+// -> 10
+
+```
+
+## Example: O is the winner
+```javascript
+
+import { createGame } from './gameFactory';
+import { score } from './score';
+
+const board = [
+    _, X, O,
+    X, O, _
+    O, X, _
+];
+
+const game = createGame(board);
+const gameScore = score(game);
+
+console.log(gameScore);
+// -> -10
+
+```
