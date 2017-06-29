@@ -1,19 +1,14 @@
 import test from 'tape';
 import { createGame, _, X, O, BOARD_LENGTH } from './gameFactory';
 
-test()
-
 test('createGame function input board type', assert => {
     const boards = [
         {},
-        null,
         17,
         'Array',
         true,
-        false,
         { __proto__: Array.prototype }
     ];
-
     boards.forEach(board => {
         const actual = () => createGame(board);
         const expected = new RegExp(`Invalid board type: ${typeof board}`);
@@ -26,12 +21,9 @@ test('createGame function input board type', assert => {
 test('createGame function input activeTurn type', assert => {
     const activeTurns = [
         {},
-        null,
-        NaN,
         [],
         'Array',
         true,
-        false,
         { __proto__: Array.prototype }
     ];
 
@@ -43,7 +35,6 @@ test('createGame function input activeTurn type', assert => {
 
     assert.end();
 });
-
 
 test('createGame function input board min length', assert => {
     const board = [];
@@ -218,7 +209,6 @@ test('getAvailableMoves property type', assert => {
 
     assert.end();
 });
-
 
 test('getAvailableMoves property output type', assert => {
     const game = createGame();
@@ -550,6 +540,166 @@ test('isWinner property output', assert => {
     assert.equal(actual, expected,
         `isWinner(${O}) output should be ${expected} when board is ${JSON.stringify(board, null, 2)}`);
 
+
+    assert.end();
+});
+
+test('getNewState property type', assert => {
+    const game = createGame();
+
+    const actual = typeof game.getNewState;
+    const expected = 'function';
+
+    assert.equal(actual, expected,
+        'getNewState type should be a function');
+
+    assert.end();
+});
+
+test('getNewState property input move type', assert => {
+    const moves = [
+        {},
+        null,
+        NaN,
+        [],
+        'Array',
+        true,
+        false,
+        { __proto__: Array.prototype }
+    ];
+
+    moves.forEach(move => {
+        const game = createGame();
+        const actual = () => game.getNewState(move);
+        const expected = new RegExp(`Invalid move type: ${typeof move}`);
+        assert.throws(actual, expected);
+    });
+
+    assert.end();
+});
+
+test('getNewState property input move position', assert => {
+    const moves = [
+        -1,
+        12,
+        0,
+        4
+    ];
+
+    const board = [
+        X, _, _,
+        _, O, _,
+        _, _, _
+    ];
+        
+    moves.forEach(move => {
+        const game = createGame(board);
+        const actual = () => game.getNewState(move);
+        const expected = new RegExp(`Invalid move position: ${move}`);
+        assert.throws(actual, expected);
+    });
+
+    assert.end();
+});
+
+test('getNewState property output type', assert => {
+    const game = createGame();
+    const actual = typeof game.getNewState(1);
+    const expected = 'object';
+
+    assert.equal(actual, expected,
+        'getNewState() should return an object');
+
+    assert.end();
+});
+
+test('getNewState property output', assert => {
+    const board = [
+        _, _, _,
+        _, _, _,
+        _, _, _
+    ];
+    let game = createGame(board);
+
+    game = game.getNewState(0);
+
+    assert.ok(game.hasOwnProperty('getBoard'),
+        'getNewState() output should have a property named "getBoard"');
+
+    assert.ok(game.hasOwnProperty('getAvailableMoves'),
+        'getNewState() output should have a property named "getAvailableMoves"');
+
+    assert.ok(game.hasOwnProperty('getActiveTurn'),
+        'getNewState() output should have a property named "getActiveTurn"');
+
+    assert.ok(game.hasOwnProperty('isWinner'),
+        'getNewState() output should have a property named "isWinner"');
+
+    assert.ok(game.hasOwnProperty('getNewState'),
+        'getNewState() output should have a property named "getNewState"');
+
+    let actual = game.getBoard();
+    let expected = [
+        X, _, _,
+        _, _, _,
+        _, _, _
+    ];
+
+    assert.deepEqual(actual, expected,
+        'getNewState() board is correct');
+
+    game = game.getNewState(1);
+    actual = game.getBoard();
+    expected = [
+        X, O, _,
+        _, _, _,
+        _, _, _
+    ];
+
+    assert.deepEqual(actual, expected,
+        'getNewState() board is correct');
+
+
+    game = game.getNewState(3);
+    actual = game.getBoard();
+    expected = [
+        X, O, _,
+        X, _, _,
+        _, _, _
+    ];
+
+    assert.deepEqual(actual, expected,
+        'getNewState() board is correct');
+
+
+    game = game.getNewState(4);
+    actual = game.getBoard();
+    expected = [
+        X, O, _,
+        X, O, _,
+        _, _, _
+    ];
+
+    assert.deepEqual(actual, expected,
+        'getNewState() board is correct');
+
+    game = game.getNewState(6);
+    actual = game.getBoard();
+    expected = [
+        X, O, _,
+        X, O, _,
+        X, _, _
+    ];
+
+    assert.deepEqual(actual, expected,
+        'getNewState() board is correct');
+
+    assert.ok(game.isWinner(X));
+
+    actual = () => game.getNewState(7);
+    expected = new RegExp(`Invalid move, game over.`);
+    
+    assert.throws(actual, expected);
 
     assert.end();
 });

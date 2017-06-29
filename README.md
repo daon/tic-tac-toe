@@ -52,6 +52,7 @@ The game object has the following methods:
 - `getAvailableMoves()` - Returns empty (_) board positions for the game
 - `getActiveTurn()` - Returns current player turn, X or O
 - `isWinner(player)` - Returns true if the argument `player` (X or O) is the winner else it returns false
+- `getNewState(move)` - Returns new game state after player move.
 
 ## Example: `getBoard()`
 
@@ -121,5 +122,41 @@ const game = createGame(board);
 const isXWinner = game.isWinner(X);
 
 console.log(isXWinner);
+// -> true
+```
+
+## Example: `getNewState(move)`
+
+```javascript
+import { createGame, _, X, O } from './gameFactory';
+
+const board = [
+    _, X, X,
+    O, O, _,
+    _, _, X
+];
+
+const game = createGame(board);
+const newGameState = game.getNewState(5);
+
+console.log(game.getBoard());
+console.log(newGameState.getBoard());
+console.log(game.getAvailableMoves());
+console.log(newGameState.getAvailableMoves());
+console.log(game.getActiveTurn());
+console.log(newGameState.getActiveTurn());
+console.log(game.isWinner(X));
+console.log(newGameState.isWinner(X));
+console.log(game.isWinner(O));
+console.log(newGameState.isWinner(O));
+// -> [0, 1, 1, 2, 2, 0, 0, 0, 1]
+// -> [0, 1, 1, 2, 2, 2, 0, 0, 1]
+// -> [0, 5, 6, 7]
+// -> [0, 6, 7]
+// -> 2
+// -> 0
+// -> false
+// -> false
+// -> false
 // -> true
 ```

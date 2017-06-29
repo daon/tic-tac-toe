@@ -8,7 +8,7 @@
   },
   "scripts": {
     "clean": "rimraf build",
-    "test": "tape -r babel-register -r ./test/setup.js \"src/**/*.test.js\" | faucet",
+    "test": "tape -r babel-register -r ./test/setup.js \"src/**/*.test.js\" | tap-dot",
     "prestart": "yarn run test",
     "start": "webpack-dev-server --progress --profile --watch --open",
     "prebuild": "yarn run test",
@@ -34,6 +34,8 @@
     "raw-loader": "^0.5.1",
     "rimraf": "^2.6.1",
     "style-loader": "^0.18.2",
+    "tap-dot": "^1.0.5",
+    "tap-html": "^0.0.4",
     "tape": "^4.7.0",
     "webpack": "^3.0.0",
     "webpack-dev-server": "^2.5.0"

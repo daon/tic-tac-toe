@@ -3,20 +3,26 @@ export const _ = 0;
 export const X = 1;
 export const O = 2;
 
+function isNumber(value) {
+    return (typeof value === 'number') && isFinite(value);
+}
+
 export function createGame(board, activeTurn) {
-    if (typeof board !== 'undefined' && !Array.isArray(board)) {
-        throw new Error(`Invalid board type: ${typeof board}`);
-    }
-
-    if (typeof activeTurn !== 'undefined' && typeof activeTurn !== 'number' || (typeof activeTurn === 'number' && isNaN(activeTurn))) {
-        throw new Error(`Invalid activeTurn type: ${typeof activeTurn}`);
-    }
-
     board = board || [
         _, _, _,
         _, _, _,
         _, _, _
-    ];
+    ];   
+
+    if (!Array.isArray(board)) {        
+        throw new Error(`Invalid board type: ${typeof board}`);
+    }
+
+    activeTurn = activeTurn || X;
+
+    if (!isNumber(activeTurn)) {
+        throw new Error(`Invalid activeTurn type: ${typeof activeTurn}`);
+    }
 
     if (board.length < BOARD_LENGTH || board.length > BOARD_LENGTH) {
         throw new Error(`Invalid board length: ${board.length}`);
@@ -26,7 +32,7 @@ export function createGame(board, activeTurn) {
     let noughtCount = 0;
     let availableMoves = [];
     board.forEach((value, position) => {
-        if (typeof value !== 'number' || isNaN(value)) {
+        if (!isNumber(value)) {
             throw new Error(`Invalid board value type: ${typeof value} at position: ${position}`)
         }
 
@@ -55,7 +61,6 @@ export function createGame(board, activeTurn) {
         throw new Error(`Invalid number of O count`);
     }
 
-    activeTurn = activeTurn || X;
     if (crossCount > noughtCount) {
         activeTurn = O;
     }
@@ -86,17 +91,42 @@ export function createGame(board, activeTurn) {
     } else if (threeInRow(O) || threeInCol(O) || threeInDig(O)) {
         winner = O;
     }
+    
+    activeTurn = winner > 0 ? 0 : activeTurn;
 
     return {
         getBoard: () => board,
         getAvailableMoves: () => availableMoves,
         getActiveTurn: () => activeTurn,
         isWinner: (player) => {
-            if (typeof player !== 'undefined' && typeof player !== 'number' || (typeof player === 'number' && isNaN(player))) {
+            if (!isNumber(player)) {
                 throw new Error(`Invalid player type: ${typeof player}`);
             }
 
             return player === winner;
-        }
+        },
+        getNewState: (move) => {
+            if (!isNumber(move)) {
+                throw new Error(`Invalid move type: ${typeof move}`);
+            }
+
+            if (move < 0 || move >= BOARD_LENGTH || !availableMoves.some(availableMove => availableMove === move)) {
+                throw new Error(`Invalid move position: ${move}`);
+            }
+
+            if (winner > 0) {
+                throw new Error(`Invalid move, game over.`);
+            }
+
+            board[move] = activeTurn;
+            let newState;
+
+            try {
+                newState = createGame(board);
+            } catch(e) {
+                throw e;
+            }
+            return newState;
+        } 
     };
 }
